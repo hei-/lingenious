@@ -1,0 +1,327 @@
+{
+ "requirement": "L 型铝支架:底板 100×60×6mm,立板沿长边,高 40mm、厚 3mm,底板四角各一个 M6 通孔,立板中间一个直径 20 的圆孔。",
+ "material": "6061",
+ "status": "success",
+ "spec": {
+  "part_type": "L型支架",
+  "features": [
+   {
+    "id": "base_plate",
+    "type": "plate",
+    "dims": {
+     "length": 100.0,
+     "width": 60.0,
+     "thickness": 6.0
+    }
+   },
+   {
+    "id": "vertical_plate",
+    "type": "plate",
+    "dims": {
+     "length": 100.0,
+     "height": 40.0,
+     "thickness": 3.0
+    }
+   },
+   {
+    "id": "corner_hole_1",
+    "type": "hole",
+    "dims": {
+     "diameter": 6.6
+    }
+   },
+   {
+    "id": "corner_hole_2",
+    "type": "hole",
+    "dims": {
+     "diameter": 6.6
+    }
+   },
+   {
+    "id": "corner_hole_3",
+    "type": "hole",
+    "dims": {
+     "diameter": 6.6
+    }
+   },
+   {
+    "id": "corner_hole_4",
+    "type": "hole",
+    "dims": {
+     "diameter": 6.6
+    }
+   },
+   {
+    "id": "vertical_hole",
+    "type": "hole",
+    "dims": {
+     "diameter": 20.0
+    }
+   }
+  ],
+  "assertions": {
+   "bbox": {
+    "x": 100.0,
+    "y": 60.0,
+    "z": 46.0,
+    "tol": 0.5
+   },
+   "hole_count": 5,
+   "hole_diameters": [
+    6.6,
+    6.6,
+    6.6,
+    6.6,
+    20.0
+   ],
+   "diameter_tol": 0.1,
+   "volume_range": null,
+   "hole_positions": [
+    {
+     "diameter": 6.6,
+     "axis": "Z",
+     "x": -36.8,
+     "y": -16.8,
+     "z": null,
+     "tol": 1.0
+    },
+    {
+     "diameter": 6.6,
+     "axis": "Z",
+     "x": 36.8,
+     "y": -16.8,
+     "z": null,
+     "tol": 1.0
+    },
+    {
+     "diameter": 6.6,
+     "axis": "Z",
+     "x": -36.8,
+     "y": 16.8,
+     "z": null,
+     "tol": 1.0
+    },
+    {
+     "diameter": 6.6,
+     "axis": "Z",
+     "x": 36.8,
+     "y": 16.8,
+     "z": null,
+     "tol": 1.0
+    },
+    {
+     "diameter": 20.0,
+     "axis": "Y",
+     "x": 0.0,
+     "y": null,
+     "z": 26.0,
+     "tol": 1.0
+    }
+   ]
+  },
+  "defaults_used": [
+   "M6 通孔按 6.6mm",
+   "四角孔边距取 max(12, 2×孔径)=13.2mm",
+   "立板圆孔沿长度方向居中、沿高度方向居中于立板",
+   "立板圆孔按通孔",
+   "立板位于底板宽度一侧，外侧面与底板边缘齐平"
+  ]
+ },
+ "rounds": [
+  {
+   "n": 1,
+   "seconds": 10.43,
+   "issues": [
+    {
+     "rule": "hole_count",
+     "level": "L2",
+     "severity": "error",
+     "target": "",
+     "message": "模型有 4 个孔,要求 5 个",
+     "measured": 4.0,
+     "required": 5.0,
+     "hint": "补充 1 个孔;当前孔径: 6.60, 6.60, 6.60, 6.60mm"
+    },
+    {
+     "rule": "hole_diameter",
+     "level": "L2",
+     "severity": "error",
+     "target": "",
+     "message": "孔径不符:要求 [6.60, 6.60, 6.60, 6.60, 20.00]mm(容差 ±0.1mm),实际 [6.60, 6.60, 6.60, 6.60]mm;缺少 [20.00],多余 [无]",
+     "measured": null,
+     "required": null,
+     "hint": "调整孔径使其匹配要求;缺少的直径: 20.00mm,多余的直径: 无mm"
+    },
+    {
+     "rule": "hole_position",
+     "level": "L2",
+     "severity": "error",
+     "target": "hole5",
+     "message": "未找到 Ø20 的 Y 向孔(期望孔轴位置 X=0, Z=26)",
+     "measured": null,
+     "required": null,
+     "hint": "确认该孔存在、孔径与孔轴方向正确;孔位用绝对坐标(原点=零件XY中心)建模,不要在叠加特征后用 faces('>Z').workplane() 打孔"
+    },
+    {
+     "rule": "internal_corner_radius",
+     "level": "L3",
+     "severity": "error",
+     "target": "internal_edges",
+     "message": "存在 1 条无圆角的内凹尖角(共长 100.0mm,最长一条位于 (0.0, -27.0, 6.0)),圆角半径 0mm,要求不小于 0.5mm(建议 ≥3mm)",
+     "measured": 0.0,
+     "required": 3.0,
+     "hint": "对这些内凹边添加圆角 fillet,半径取 3mm(最小 0.5mm);在 CadQuery 中先选中内凹边再 fillet,或在建模时对草图拐角加圆角",
+     "location": [
+      0.0,
+      -27.0,
+      6.0
+     ]
+    },
+    {
+     "rule": "thin_web_height",
+     "level": "L3",
+     "severity": "warning",
+     "target": "(-0.0, -28.5, 46.0)",
+     "message": "薄筋/薄壁(顶面位于 (-0.0, -28.5, 46.0) 附近)高 40.0mm,厚 3.0mm,高厚比 13.3,超过建议值 8(加工易振刀、变形)",
+     "measured": 13.33,
+     "required": 8.0,
+     "hint": "将厚度增加到至少 5.0mm,或把高度降到不超过 24.0mm,或在根部加圆角/增设加强筋",
+     "location": [
+      -0.0,
+      -28.5,
+      46.0
+     ]
+    }
+   ],
+   "code": "import cadquery as cq\n\n# ---------------- parameters ----------------\nBASE_L = 100.0          # base plate length (X)\nBASE_W = 60.0           # base plate width (Y)\nBASE_T = 6.0            # base plate thickness (Z)\n\nWALL_H = 40.0           # vertical plate height above base top\nWALL_T = 3.0            # vertical plate thickness (Y)\n\nCORNER_HOLE_D = 6.6     # M6 clearance hole diameter\nCORNER_HOLE_X = 36.8    # corner hole |x| position\nCORNER_HOLE_Y = 16.8    # corner hole |y| position\n\nWALL_HOLE_D = 20.0      # vertical plate hole diameter\nWALL_HOLE_Z = 26.0      # hole centre height (from base bottom)\n\n# ---------------- feature: base ----------------\nbody = cq.Workplane(\"XY\").box(BASE_L, BASE_W, BASE_T, centered=(True, True, False))\n\n# ---------------- feature: vertical_plate ----------------\n# wall sits along the -Y long edge, outer face flush with base edge\nwall = (cq.Workplane(\"XY\").workplane(offset=BASE_T)\n        .center(0, -BASE_W / 2 + WALL_T / 2)\n        .rect(BASE_L, WALL_T)\n        .extrude(WALL_H))\nbody = body.union(wall)\n\n# ---------------- feature: corner holes (M6, through base) ----------------\ncorner_pts = [(sx * CORNER_HOLE_X, sy * CORNER_HOLE_Y)\n              for sx in (-1, 1) for sy in (-1, 1)]\nbody = body.cut(cq.Workplane(\"XY\").pushPoints(corner_pts)\n                .circle(CORNER_HOLE_D / 2).extrude(BASE_T))\n\n# ---------------- feature: vertical_hole (D20, through wall along Y) ----------------\n# cylinder axis along Y, centred at x=0, z=WALL_HOLE_Z, spanning full wall thickness\nhole = (cq.Workplane(\"XZ\").workplane(offset=-BASE_W / 2 - 1.0)\n        .center(0, WALL_HOLE_Z)\n        .circle(WALL_HOLE_D / 2)\n        .extrude(WALL_T + 2.0))\nbody = body.cut(hole)\n\nresult = body",
+   "code_reconstructed": false,
+   "model": "part_r1.glb"
+  },
+  {
+   "n": 2,
+   "seconds": 3.25,
+   "issues": [
+    {
+     "rule": "hole_count",
+     "level": "L2",
+     "severity": "error",
+     "target": "",
+     "message": "模型有 4 个孔,要求 5 个",
+     "measured": 4.0,
+     "required": 5.0,
+     "hint": "补充 1 个孔;当前孔径: 6.60, 6.60, 6.60, 6.60mm"
+    },
+    {
+     "rule": "hole_diameter",
+     "level": "L2",
+     "severity": "error",
+     "target": "",
+     "message": "孔径不符:要求 [6.60, 6.60, 6.60, 6.60, 20.00]mm(容差 ±0.1mm),实际 [6.60, 6.60, 6.60, 6.60]mm;缺少 [20.00],多余 [无]",
+     "measured": null,
+     "required": null,
+     "hint": "调整孔径使其匹配要求;缺少的直径: 20.00mm,多余的直径: 无mm"
+    },
+    {
+     "rule": "hole_position",
+     "level": "L2",
+     "severity": "error",
+     "target": "hole5",
+     "message": "未找到 Ø20 的 Y 向孔(期望孔轴位置 X=0, Z=26)",
+     "measured": null,
+     "required": null,
+     "hint": "确认该孔存在、孔径与孔轴方向正确;孔位用绝对坐标(原点=零件XY中心)建模,不要在叠加特征后用 faces('>Z').workplane() 打孔"
+    },
+    {
+     "rule": "thin_web_height",
+     "level": "L3",
+     "severity": "warning",
+     "target": "(-0.0, -28.5, 46.0)",
+     "message": "薄筋/薄壁(顶面位于 (-0.0, -28.5, 46.0) 附近)高 37.0mm,厚 3.0mm,高厚比 12.3,超过建议值 8(加工易振刀、变形)",
+     "measured": 12.33,
+     "required": 8.0,
+     "hint": "将厚度增加到至少 4.6mm,或把高度降到不超过 24.0mm,或在根部加圆角/增设加强筋",
+     "location": [
+      -0.0,
+      -28.5,
+      46.0
+     ]
+    }
+   ],
+   "code": "# ASSERTION_DISPUTE: thin_web_height\nimport cadquery as cq\n\n# ---------------- parameters ----------------\nBASE_L = 100.0          # base plate length (X)\nBASE_W = 60.0           # base plate width (Y)\nBASE_T = 6.0            # base plate thickness (Z)\n\nWALL_H = 40.0           # vertical plate height above base top\nWALL_T = 3.0            # vertical plate thickness (Y)\n\nCORNER_HOLE_D = 6.6     # M6 clearance hole diameter\nCORNER_HOLE_X = 36.8    # corner hole |x| position\nCORNER_HOLE_Y = 16.8    # corner hole |y| position\n\nWALL_HOLE_D = 20.0      # vertical plate hole diameter\nWALL_HOLE_Z = 26.0      # hole centre height (from base bottom)\n\nINNER_FILLET_R = 3.0    # inner corner fillet radius (base top / wall)\n\n# ---------------- feature: base ----------------\nbody = cq.Workplane(\"XY\").box(BASE_L, BASE_W, BASE_T, centered=(True, True, False))\n\n# ---------------- feature: vertical_plate ----------------\n# wall sits along the -Y long edge, outer face flush with base edge\nwall = (cq.Workplane(\"XY\").workplane(offset=BASE_T)\n        .center(0, -BASE_W / 2 + WALL_T / 2)\n        .rect(BASE_L, WALL_T)\n        .extrude(WALL_H))\nbody = body.union(wall)\n\n# ---------------- feature: inner_fillet (base top / wall junction) ----------------\n# fillet the concave inner edge where the wall meets the base top face\nbody = body.edges(cq.selectors.BoxSelector(\n    (-BASE_L / 2 - 1.0, -BASE_W / 2 + WALL_T - 0.1, BASE_T - 0.1),\n    (BASE_L / 2 + 1.0, -BASE_W / 2 + WALL_T + 0.1, BASE_T + 0.1))).fillet(INNER_FILLET_R)\n\n# ---------------- feature: corner holes (M6, through base) ----------------\ncorner_pts = [(sx * CORNER_HOLE_X, sy * CORNER_HOLE_Y)\n              for sx in (-1, 1) for sy in (-1, 1)]\nbody = body.cut(cq.Workplane(\"XY\").pushPoints(corner_pts)\n                .circle(CORNER_HOLE_D / 2).extrude(BASE_T))\n\n# ---------------- feature: vertical_hole (D20, through wall along Y) ----------------\n# cylinder axis along Y, centred at x=0, z=WALL_HOLE_Z, spanning full wall thickness\nhole = (cq.Workplane(\"XZ\").workplane(offset=-BASE_W / 2 - 1.0)\n        .center(0, WALL_HOLE_Z)\n        .circle(WALL_HOLE_D / 2)\n        .extrude(WALL_T + 2.0))\nbody = body.cut(hole)\n\nresult = body",
+   "code_reconstructed": false,
+   "model": "part_r2.glb"
+  },
+  {
+   "n": 3,
+   "seconds": 2.25,
+   "issues": [
+    {
+     "rule": "thin_web_height",
+     "level": "L3",
+     "severity": "warning",
+     "target": "(-0.0, -28.5, 46.0)",
+     "message": "薄筋/薄壁(顶面位于 (-0.0, -28.5, 46.0) 附近)高 37.0mm,厚 3.0mm,高厚比 12.3,超过建议值 8(加工易振刀、变形)",
+     "measured": 12.33,
+     "required": 8.0,
+     "hint": "将厚度增加到至少 4.6mm,或把高度降到不超过 24.0mm,或在根部加圆角/增设加强筋",
+     "location": [
+      -0.0,
+      -28.5,
+      46.0
+     ]
+    }
+   ],
+   "code": "# ASSERTION_DISPUTE: thin_web_height\nimport cadquery as cq\n\n# ---------------- parameters ----------------\nBASE_L = 100.0          # base plate length (X)\nBASE_W = 60.0           # base plate width (Y)\nBASE_T = 6.0            # base plate thickness (Z)\n\nWALL_H = 40.0           # vertical plate height above base top\nWALL_T = 3.0            # vertical plate thickness (Y)\n\nCORNER_HOLE_D = 6.6     # M6 clearance hole diameter\nCORNER_HOLE_X = 36.8    # corner hole |x| position\nCORNER_HOLE_Y = 16.8    # corner hole |y| position\n\nWALL_HOLE_D = 20.0      # vertical plate hole diameter\nWALL_HOLE_Z = 26.0      # hole centre height (from base bottom)\n\nINNER_FILLET_R = 3.0    # inner corner fillet radius (base top / wall)\n\n# ---------------- feature: base ----------------\nbody = cq.Workplane(\"XY\").box(BASE_L, BASE_W, BASE_T, centered=(True, True, False))\n\n# ---------------- feature: vertical_plate ----------------\n# wall sits along the -Y long edge, outer face flush with base edge\nwall = (cq.Workplane(\"XY\").workplane(offset=BASE_T)\n        .center(0, -BASE_W / 2 + WALL_T / 2)\n        .rect(BASE_L, WALL_T)\n        .extrude(WALL_H))\nbody = body.union(wall)\n\n# ---------------- feature: inner_fillet (base top / wall junction) ----------------\n# fillet the concave inner edge where the wall meets the base top face\nbody = body.edges(cq.selectors.BoxSelector(\n    (-BASE_L / 2 - 1.0, -BASE_W / 2 + WALL_T - 0.1, BASE_T - 0.1),\n    (BASE_L / 2 + 1.0, -BASE_W / 2 + WALL_T + 0.1, BASE_T + 0.1))).fillet(INNER_FILLET_R)\n\n# ---------------- feature: corner holes (M6, through base) ----------------\ncorner_pts = [(sx * CORNER_HOLE_X, sy * CORNER_HOLE_Y)\n              for sx in (-1, 1) for sy in (-1, 1)]\nbody = body.cut(cq.Workplane(\"XY\").pushPoints(corner_pts)\n                .circle(CORNER_HOLE_D / 2).extrude(BASE_T))\n\n# ---------------- feature: vertical_hole (D20, through wall along Y) ----------------\n# cylinder axis along Y, centred at x=0, z=WALL_HOLE_Z, spanning full wall thickness\n# build on XY plane, extrude along Y using a rotated workplane with explicit origin\nhole = (cq.Workplane(\"XY\")\n        .workplane(origin=(0, 0, 0))\n        .center(0, 0)\n        .transformed(offset=(0, 0, 0), rotate=(90, 0, 0))\n        .center(0, WALL_HOLE_Z)\n        .circle(WALL_HOLE_D / 2)\n        .extrude(BASE_W + 2.0))\nbody = body.cut(hole)\n\nresult = body",
+   "code_reconstructed": false,
+   "model": "part.glb"
+  }
+ ],
+ "checked_rules": [
+  "valid_solid",
+  "single_solid",
+  "positive_volume",
+  "bbox_match",
+  "hole_count",
+  "hole_diameter",
+  "hole_position",
+  "min_wall_thickness",
+  "hole_edge_distance",
+  "internal_corner_radius",
+  "hole_spacing",
+  "hole_depth_ratio",
+  "deep_pocket",
+  "thin_web_height"
+ ],
+ "usage": {
+  "calls": 4,
+  "prompt_tokens": 7714,
+  "completion_tokens": 2614
+ },
+ "final_issues": [
+  {
+   "rule": "thin_web_height",
+   "level": "L3",
+   "severity": "warning",
+   "target": "(-0.0, -28.5, 46.0)",
+   "message": "薄筋/薄壁(顶面位于 (-0.0, -28.5, 46.0) 附近)高 37.0mm,厚 3.0mm,高厚比 12.3,超过建议值 8(加工易振刀、变形)",
+   "measured": 12.33,
+   "required": 8.0,
+   "hint": "将厚度增加到至少 4.6mm,或把高度降到不超过 24.0mm,或在根部加圆角/增设加强筋",
+   "location": [
+    -0.0,
+    -28.5,
+    46.0
+   ]
+  }
+ ],
+ "log": [
+  "第1轮:未通过 [hole_count] 模型有 4 个孔,要求 5 个 [hole_diameter] 孔径不符:要求 [6.60, 6.60, 6.60, 6.60, 20.00]mm(容差 ±0.1mm),实际 [6.60, 6.60, 6.60, 6.60]mm;缺少 [20.00],多余 [无] [hole_position] 未找到 Ø20 的 Y 向孔(期望孔轴位置 X=0, Z=26) [internal_corner_radius] 存在 1 条无圆角的内凹尖角(共长 100.0mm,最长一条位于 (0.0, -27.0, 6.0)),圆角半径 0mm,要求不小于 0.5mm(建议 ≥3mm)",
+  "第2轮:未通过 [hole_count] 模型有 4 个孔,要求 5 个 [hole_diameter] 孔径不符:要求 [6.60, 6.60, 6.60, 6.60, 20.00]mm(容差 ±0.1mm),实际 [6.60, 6.60, 6.60, 6.60]mm;缺少 [20.00],多余 [无] [hole_position] 未找到 Ø20 的 Y 向孔(期望孔轴位置 X=0, Z=26)",
+  "第3轮:通过"
+ ],
+ "bbox": [
+  100.0,
+  60.0,
+  46.0
+ ]
+}

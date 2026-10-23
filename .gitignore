@@ -26,6 +26,6 @@ eval/results_dfm/runs/
 .vscode/
 
 # web app state
-data/
+/data/
 web/ui/node_modules/
 web/ui/dist/
