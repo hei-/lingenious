@@ -4,8 +4,10 @@ All notable changes are documented here. Format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-23
+
 ### Added
-- arm64 web image: the release workflow now publishes `linux/amd64` and `linux/arm64`; CI builds and smoke-tests the image on native x86_64 and arm64 runners.
+- Prebuilt multi-arch web image `ghcr.io/heiworks/lingenious-web` (documented in the README). The release workflow now publishes `linux/amd64` and `linux/arm64`; CI builds and smoke-tests the image on native x86_64 and arm64 runners.
 - Read-only online demo of the web app on GitHub Pages (`/demo/`): a `VITE_DEMO=1` build reads the bundled examples exported by `scripts/export_demo.py` (same payloads as the API, checked by a test); the landing page links to it. Example logic moved to `web/server/examples.py`; an example's `created_at` now comes from its `meta.json` instead of the file modification time.
 
 ### Changed
@@ -37,5 +39,6 @@ All notable changes are documented here. Format follows [Keep a Changelog](https
 - Thresholds of DFM rules are partly rules of thumb pending process-engineering review (see `docs/dfm-rules.md`).
 - The sandbox is not safe for untrusted code (see SECURITY.md).
 
-[Unreleased]: https://github.com/heiworks/lingenious/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/heiworks/lingenious/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/heiworks/lingenious/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/heiworks/lingenious/releases/tag/v0.1.0
