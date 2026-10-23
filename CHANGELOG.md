@@ -10,7 +10,7 @@ All notable changes are documented here. Format follows [Keep a Changelog](https
 
 ### Changed
 - `eval.runner` starts over by default (replacing `results.csv` in the output directory); `--resume` continues an interrupted run. Previously the committed results made a fresh `make eval-dfm` skip every run.
-- CadQuery 2.5.2 -> 2.8.0 (OCCT 7.7 -> 7.9 via `cadquery-ocp` 7.9.3.1.1), which brings aarch64 wheels. All tests pass unchanged; regenerated example drawings differ in about 0.03% of pixels. CadQuery 2.8 pulls in vtk, trame, numba and scipy, so the dev image grew from 2.1 GB to 3.1 GB.
+- CadQuery 2.5.2 -> 2.8.0 (OCCT 7.7 -> 7.9 via `cadquery-ocp` 7.9.3.1.1), which brings aarch64 wheels. All tests pass unchanged; regenerated example drawings differ in about 0.03% of pixels; a DFM-set re-run shows no regression (final pass A/B/C 97/100/97%, results in `eval/results_dfm/cadquery-2.8/`). CadQuery 2.8 pulls in vtk, trame, numba and scipy, so the dev image grew from 2.1 GB to 3.1 GB.
 
 ## [0.1.0] - 2026-10-23
 
