@@ -1,7 +1,8 @@
 """python -m eval.runner --configs A B C --repeat 3 --workers 4 [--ids e1 m1] -> eval/results/results.csv
 
 Grading is against ground-truth assertions (eval/tasks.py), independent of the LLM-parsed spec.
-Resumable: rows already in results.csv (task, config, rep) are skipped.
+Starts over by default (an existing results.csv in --out is replaced). With --resume, rows already in results.csv
+(task, config, rep) are kept and skipped, e.g. after an interrupted run.
 """
 from __future__ import annotations
 
@@ -67,6 +68,7 @@ def main() -> None:
     ap.add_argument("--ids", nargs="*")
     ap.add_argument("--taskset", choices=["main", "dfm"], default="main")
     ap.add_argument("--out", default=None, help="default: eval/results (main) or eval/results_dfm (dfm)")
+    ap.add_argument("--resume", action="store_true", help="keep rows already in results.csv and skip them")
     a = ap.parse_args()
     if a.taskset == "dfm":
         from eval.tasks_dfm import TASKS
@@ -78,6 +80,8 @@ def main() -> None:
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     csv_path = out / "results.csv"
     done = set()
+    if csv_path.exists() and not a.resume:
+        csv_path.unlink()  # fresh run: the committed results would otherwise make every run a no-op
     if csv_path.exists():
         done = {(r["task"], r["config"], int(r["rep"])) for r in csv.DictReader(open(csv_path))}
     new = not csv_path.exists()
