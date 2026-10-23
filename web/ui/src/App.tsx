@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Languages, Menu, Moon, Sun, SunMoon } from 'lucide-react';
-import { api, auth, enableMock, isMock, setUnauthorizedHandler } from './api';
+import { api, auth, enableMock, isDemo, isMock, setUnauthorizedHandler } from './api';
 import type { Health, RunDetail, RunSummary } from './types';
 import { useI18n } from './i18n';
 import { Sidebar, type ListState } from './components/Sidebar';
 import { NewRun } from './components/NewRun';
 import { Workspace } from './components/Workspace';
 import { Login } from './components/Login';
+
+const REPO_URL = 'https://github.com/heiworks/lingenious';
 
 type Route = { name: 'new' } | { name: 'run'; id: string; version: number | null };
 
@@ -116,6 +118,7 @@ export default function App() {
         {health?.auth_required && health.authenticated && <button type="button" className="tool" onClick={() => void logout()}>{t('logout')}</button>}
       </header>
       {mock && <div className="banner" role="status">{t('mockBanner')}</div>}
+      {isDemo && <div className="banner" role="status">{t('demoBanner')} <a href={REPO_URL} target="_blank" rel="noopener">GitHub</a></div>}
       {locked ? <main id="main" className="main"><Login onDone={() => { setHealthLoading(true); setSession((n) => n + 1); }} /></main> :
       <div className={'shell' + (drawer ? ' drawer-open' : '')}>
         <aside className="sidebar">

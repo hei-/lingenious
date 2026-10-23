@@ -58,3 +58,9 @@ Issue 字段:`rule level severity target message measured required hint`;level �
 - 下载文件名:`GET /api/runs/{id}/v{n}/{file}?download=1` 返回 `Content-Disposition: attachment; filename="<ascii 兜底>"; filename*=UTF-8''<名字>`,名字为 `<title>_v<n>.<ext>`(title 只保留字母/数字/中日韩字符与 `._-`,其他折叠为 `_`,最长 60):`part.step→.step`、`part.py→.py`、`drawing.pdf→.pdf`、`drawing.dxf→.dxf`、`drawing.png→_drawing.png`、`render.png→_render.png`、`run.json→_run.json`、`log.txt→_log.txt`、`rounds/r<k>.glb→_r<k>.glb`。不带参数时保持内联(预览)。前端 `src/lib/files.ts` 与 `web/server/store.py` 的 `download_name` 规则一致。
 - 打包下载:`GET /api/runs/{id}/v{n}/bundle.zip`(示例同样可用)流式返回该版本面向用户的文件(STEP、part.py、drawing.pdf/dxf/png、render.png、run.json、log.txt;不含 glb、events、meta),zip 内文件名同上,附件名 `<title>_v<n>.zip`;访问令牌中间件同样适用;未知 run/示例/版本或无文件返回 404。
 - `thumb.png`:成功版本额外生成的卡片缩略图(仅等轴测视图、透明背景、480×360,z-buffer 软渲染,`core.render.render_thumb`);`render.png`(四视图)不变。在 `files` 白名单内,产出时发 `artifact`(`thumb.png`),失败发 `artifact_failed`。示例的 thumb 与其余产物一起由 `scripts/make_examples.py` 生成(`scripts/make_example_glb.py` 仅为缺 glb/thumb 的旧样例补齐)。前端缩略图优先用 `thumb.png`,缺失时回退到 `render.png`。
+
+## 静态演示版(GitHub Pages)
+
+- `VITE_DEMO=1` 构建的前端不连后端,改用 `src/demo.ts` 读取 `demo-data/` 下的静态文件:`examples.json`(与 `GET /api/examples` 完全相同)和 `runs/<id>/v<n>/<file>`(与 `GET /api/runs/{id}/v{n}/{file}` 相同)。只有内置示例;`health` 返回 `{llm_configured: false, demo: true}`,新建与修改被禁用,界面顶部显示演示提示;`events` 与服务端对示例的行为一样只回放一个 `done`;没有 ZIP 打包下载。
+- 静态文件由 `scripts/export_demo.py` 生成(只用标准库,复用 `web/server/examples.py` 的示例逻辑);`tests/test_export_demo.py` 检查导出结果与接口响应逐字节一致。
+- `.github/workflows/pages.yml` 把落地页放在站点根目录、演示版放在 `demo/`。本地预览:`cd web/ui && VITE_DEMO=1 npx vite build --outDir dist-demo && python3 ../../scripts/export_demo.py --out dist-demo/demo-data`,然后对 `dist-demo` 起任意静态服务器。

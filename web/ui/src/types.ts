@@ -95,7 +95,7 @@ export interface RunDetail {
   versions: VersionInfo[];
 }
 
-export interface Health { ok: boolean; llm_configured: boolean; auth_required?: boolean; authenticated?: boolean }
+export interface Health { ok: boolean; llm_configured: boolean; auth_required?: boolean; authenticated?: boolean; /** static read-only demo build */ demo?: boolean }
 
 /** SSE events, see docs/web-app.md */
 export type LiveEvent =

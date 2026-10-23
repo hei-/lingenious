@@ -80,6 +80,8 @@ docker compose up --build     # or: make web
 
 Open **http://localhost:8000**. The three bundled examples (left sidebar, "Examples") need no API key.
 
+**Online demo:** a read-only build of the same UI with the bundled examples runs on GitHub Pages: https://heiworks.github.io/lingenious/demo/ (no backend; creating runs needs a self-hosted instance).
+
 - **Local only by default.** The port is bound to `127.0.0.1`. To reach it from another machine, put it behind a reverse proxy with HTTPS, and set `LINGENIOUS_ACCESS_TOKEN` in `.env` so the UI asks for a token (see [SECURITY.md](SECURITY.md)).
 - **Data:** runs are stored in the compose volume `data` (shown by `docker volume ls` as `<project>_data`, e.g. `lingenious_data`; `/app/data` in the container).
 - **UI development** (needs Node 22): `make ui-install`, then `cd web/ui && npm run dev` and open the URL Vite prints; `/api` is proxied to http://localhost:8000 (override with `API_TARGET`). Add `?mock=1` to run the UI on recorded data without a backend.

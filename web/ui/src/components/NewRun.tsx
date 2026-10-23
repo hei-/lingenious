@@ -17,6 +17,7 @@ export function NewRun({ health, healthLoading, onCreate, firstExample, examples
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const off = !!health && !health.llm_configured;
+  const demo = !!health?.demo;
   const unknown = !health && !healthLoading;
   const real = (examples ?? []).filter((e) => e.request).slice(0, 3);
   const curated = EXAMPLE_PROMPTS[lang].slice(1);
@@ -30,7 +31,7 @@ export function NewRun({ health, healthLoading, onCreate, firstExample, examples
   ];
   const validation = request.trim().length === 0 ? null : request.trim().length < 6 ? t('reqTooShort') : request.length > MAX_REQUEST_LEN ? t('reqTooLong', { n: MAX_REQUEST_LEN }) : null;
 
-  const disabledReason = off ? t('llmOff') : !request.trim() ? t('reqEmpty') : validation;
+  const disabledReason = off ? t(demo ? 'demoOff' : 'llmOff') : !request.trim() ? t('reqEmpty') : validation;
   const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
   const formRef = useRef<HTMLFormElement>(null);
   const prompts = cards.filter((c) => !c.id);
@@ -51,8 +52,8 @@ export function NewRun({ health, healthLoading, onCreate, firstExample, examples
         <p className="muted">{t('wSub')}</p>
         {off && (
           <div className="notice warn" role="alert">
-            <strong>{t('llmOff')}</strong>
-            <p>{t('llmOffHint')}</p>
+            <strong>{t(demo ? 'demoOff' : 'llmOff')}</strong>
+            <p>{t(demo ? 'demoOffHint' : 'llmOffHint')}</p>
             {firstExample && <a className="btn sm" href={`#/run/${firstExample}`}>{t('examples')} →</a>}
           </div>
         )}

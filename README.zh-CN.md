@@ -62,6 +62,8 @@ docker compose up --build     # 或:make web
 
 打开 **http://localhost:8000**。左侧"示例"里的三个内置示例不需要 API key。
 
+**在线演示:** 同一套界面的只读版本(内置三个示例)部署在 GitHub Pages:https://heiworks.github.io/lingenious/demo/ (没有后端,新建任务需要自己部署)。
+
 - **默认只能本机访问。** 端口只绑定 `127.0.0.1`。要从其他机器访问,请放在带 HTTPS 的反向代理后面,并在 `.env` 里设置 `LINGENIOUS_ACCESS_TOKEN`,界面会要求输入令牌(见 [SECURITY.md](SECURITY.md))。
 - **数据:** 运行记录保存在 compose 卷 `data` 里(`docker volume ls` 显示为 `<项目名>_data`,例如 `lingenious_data`;容器内 `/app/data`)。
 - **前端开发**(需要 Node 22):`make ui-install`,然后 `cd web/ui && npm run dev`,打开 Vite 打印的地址;`/api` 会代理到 http://localhost:8000(可用 `API_TARGET` 改)。地址后加 `?mock=1` 可以不连后端、用录制的数据运行界面。

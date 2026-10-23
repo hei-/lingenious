@@ -4,6 +4,9 @@ All notable changes are documented here. Format follows [Keep a Changelog](https
 
 ## [Unreleased]
 
+### Added
+- Read-only online demo of the web app on GitHub Pages (`/demo/`): a `VITE_DEMO=1` build reads the bundled examples exported by `scripts/export_demo.py` (same payloads as the API, checked by a test); the landing page links to it. Example logic moved to `web/server/examples.py`; an example's `created_at` now comes from its `meta.json` instead of the file modification time.
+
 ## [0.1.0] - 2026-10-23
 
 ### Added

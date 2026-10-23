@@ -19,15 +19,15 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from core.config import load_config
-from web.server import jobs as jobs_mod
+from web.server import examples, jobs as jobs_mod
 from web.server.auth import COOKIE, OPEN_PATHS, Auth
 from web.server.store import BUNDLE, FILES, ID_RE, ROUND_RE, TERMINAL, Store, download_name, file_list, file_sizes
+from web.server.examples import EX_PREFIX
 
 ROOT = Path(__file__).resolve().parents[2]
 mimetypes.add_type("model/gltf-binary", ".glb")
 MEDIA = {".step": "application/octet-stream", ".dxf": "application/dxf", ".py": "text/plain; charset=utf-8",
          ".txt": "text/plain; charset=utf-8", ".json": "application/json"}
-EX_PREFIX = "example-"
 
 
 def _disposition(name: str) -> str:
@@ -100,7 +100,7 @@ def create_app(data_dir: Optional[Path] = None, cfg: Optional[dict] = None, exam
 
     # ---- examples (read-only)
     def example_dirs() -> dict[str, Path]:
-        return {EX_PREFIX + d.name: d for d in sorted(ex_dir.glob("*")) if d.is_dir() and (d / "v1" / "run.json").exists()}
+        return examples.example_dirs(ex_dir)
 
     def example_vdir(d: Path, n: int, make_glb: bool = False) -> Path:
         v = d / f"v{n}"
@@ -111,25 +111,7 @@ def create_app(data_dir: Optional[Path] = None, cfg: Optional[dict] = None, exam
                 step_to_glb(v / "part.step", c / "part.glb")
         return v
 
-    def example_files(d: Path, n: int) -> list[str]:
-        v = d / f"v{n}"
-        fl = file_list(v)
-        if "part.glb" not in fl and (v / "part.step").exists():
-            fl.append("part.glb")
-        return fl
-
-    def example_detail(rid: str, d: Path) -> dict:
-        meta = json.loads((d / "meta.json").read_text()) if (d / "meta.json").exists() else {}
-        vs = sorted(int(p.name[1:]) for p in d.glob("v[0-9]*") if (p / "run.json").exists())
-        runs = {str(n): json.loads((d / f"v{n}" / "run.json").read_text()) for n in vs}
-        spec = (runs[str(vs[0])].get("spec") or {})
-        return {"id": rid, "title": spec.get("part_type") or d.name, "request": meta.get("request", ""),
-                "material": meta.get("material", spec.get("material", "")), "process": spec.get("process", ""),
-                "config": meta.get("config", "C"), "created_at": datetime.fromtimestamp((d / "v1" / "run.json").stat().st_mtime, timezone.utc).isoformat(),
-                "status": runs[str(vs[-1])].get("status", "success"), "versions": vs, "changes": meta.get("changes", {}), "synthetic": meta.get("synthetic", {}), "selection": meta.get("selection"), "source": meta.get("source"),
-                "version_status": {str(n): runs[str(n)].get("status", "success") for n in vs},
-                "runs": runs, "files": {str(n): example_files(d, n) for n in vs},
-                "file_sizes": {str(n): file_sizes(d / f"v{n}", example_files(d, n)) for n in vs}, "example": True}
+    example_detail = examples.example_detail
 
     # ---- API
     @app.get("/api/health")

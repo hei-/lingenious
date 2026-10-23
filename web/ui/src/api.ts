@@ -1,11 +1,14 @@
 import type { Health, LiveEvent, RunDetail, RunSummary, VersionInfo, RunJson } from './types';
 import { EVENT_NAMES } from './types';
 import * as mock from './mock';
+import { demoApi } from './demo';
 
 export const MAX_REQUEST_LEN = 2000;
 
 let mockMode = typeof location !== 'undefined' && new URLSearchParams(location.search).get('mock') === '1';
 export const isMock = () => mockMode;
+/** static read-only demo (VITE_DEMO=1 build for GitHub Pages), see demo.ts */
+export const isDemo = import.meta.env.VITE_DEMO === '1';
 export function enableMock() { mockMode = true; }
 
 export type StreamStatus = 'open' | 'lost';
@@ -98,7 +101,7 @@ const real: Api = {
 };
 
 export const api: Api = new Proxy(real, {
-  get: (t, k: keyof Api) => (mockMode ? (mock.mockApi as Api)[k] : t[k]),
+  get: (t, k: keyof Api) => (isDemo ? demoApi[k] : mockMode ? (mock.mockApi as Api)[k] : t[k]),
 });
 
 export async function fetchText(url: string): Promise<string> {

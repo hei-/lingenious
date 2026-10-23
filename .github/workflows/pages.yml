@@ -2,7 +2,14 @@ name: pages
 on:
   push:
     branches: [main]
-    paths: ["web/landing/**", ".github/workflows/pages.yml"]
+    paths:
+      - "web/landing/**"
+      - "web/ui/**"
+      - "examples/**"
+      - "web/server/examples.py"
+      - "web/server/store.py"
+      - "scripts/export_demo.py"
+      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -22,9 +29,24 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/ui/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # site = landing page at the root + read-only web app demo (bundled examples, no backend) under demo/
+      - name: Build site
+        run: |
+          cp -R web/landing _site
+          (cd web/ui && npm ci --no-audit --no-fund && VITE_DEMO=1 npx vite build --outDir "$GITHUB_WORKSPACE/_site/demo" --emptyOutDir)
+          rm -rf _site/demo/mock
+          python3 scripts/export_demo.py --out _site/demo/demo-data
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: web/landing
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4
