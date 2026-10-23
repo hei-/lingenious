@@ -2,7 +2,7 @@
 
 **English** | [简体中文](README.zh-CN.md)
 
-[![tests](https://github.com/hei-/lingenious/actions/workflows/tests.yml/badge.svg)](https://github.com/hei-/lingenious/actions/workflows/tests.yml)
+[![tests](https://github.com/heiworks/lingenious/actions/workflows/tests.yml/badge.svg)](https://github.com/heiworks/lingenious/actions/workflows/tests.yml)
 
 Lingenious is a parametric CAD agent for CNC machining. You describe a part in text; an LLM writes a CadQuery script; the **B-Rep geometry of OpenCASCADE (OCCT) judges the result**: is the solid valid, does it match the requirement, does it follow manufacturability (DFM) rules. If a check fails, the specific violations (with numbers and suggestions) are fed back to the LLM for repair, up to 4 rounds. The output is a STEP file, the parametric script, a render, a three-view engineering drawing and an iteration log.
 
@@ -56,7 +56,7 @@ The drawing (`core/drawing`) uses OCCT HLR for a third-angle, A3 three-view shee
 Needs only Docker.
 
 ```bash
-git clone https://github.com/hei-/lingenious && cd lingenious
+git clone https://github.com/heiworks/lingenious && cd lingenious
 cp .env.example .env     # fill in DEEPSEEK_API_KEY
 scripts/run.sh bracket "L 型铝支架:底板 100×60×6mm,立板沿长边,高 40mm、厚 3mm,底板四角各一个 M6 通孔,立板中间一个直径 20 的圆孔。" \
     --material 6061 --modify "立板厚度改成 4mm"

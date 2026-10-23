@@ -26,9 +26,8 @@ All notable changes are documented here. Format follows [Keep a Changelog](https
 - Spec parsing no longer stops with "need info" when only hole positions, fillets, chamfers or hole depth are unspecified: the prompt forbids listing them as missing and `parse_spec` moves any such item to `defaults_used`. U-bracket example request: 5/10 -> 0/10 false "need info"; underspecified requests still ask (10/10).
 
 ### Known gaps
-- No prebuilt image for this repository: the owner name `hei-` is not a valid Docker namespace, so GHCR publishing is skipped; build locally with `docker compose up --build`.
 - Thresholds of DFM rules are partly rules of thumb pending process-engineering review (see `docs/dfm-rules.md`).
 - The sandbox is not safe for untrusted code (see SECURITY.md).
 
-[Unreleased]: https://github.com/hei-/lingenious/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/hei-/lingenious/releases/tag/v0.1.0
+[Unreleased]: https://github.com/heiworks/lingenious/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/heiworks/lingenious/releases/tag/v0.1.0

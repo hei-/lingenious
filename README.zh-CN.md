@@ -2,7 +2,7 @@
 
 [English](README.md) | **简体中文**
 
-[![tests](https://github.com/hei-/lingenious/actions/workflows/tests.yml/badge.svg)](https://github.com/hei-/lingenious/actions/workflows/tests.yml)
+[![tests](https://github.com/heiworks/lingenious/actions/workflows/tests.yml/badge.svg)](https://github.com/heiworks/lingenious/actions/workflows/tests.yml)
 
 面向 CNC 机加工的参数化 CAD 智能体:输入零件需求,LLM 生成 CadQuery 参数化脚本,**用 OCCT 的 B-Rep 几何做判断**(几何有效性、需求符合度、可制造性规则),不通过则带着具体违规项自动修正,输出 STEP、参数化脚本、渲染图和迭代日志。
 
@@ -37,7 +37,7 @@
 任何装了 Docker 的机器都能跑:
 
 ```bash
-git clone https://github.com/hei-/lingenious && cd lingenious
+git clone https://github.com/heiworks/lingenious && cd lingenious
 cp .env.example .env            # 填入 DEEPSEEK_API_KEY
 scripts/run.sh bracket "L 型铝支架:底板 100×60×6mm,立板沿长边,高 40mm、厚 3mm,底板四角各一个 M6 通孔,立板中间一个直径 20 的圆孔。" \
     --material 6061 --modify "立板厚度改成 4mm"

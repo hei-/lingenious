@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # GHCR paths use the owner name, and Docker references cannot have a path component ending in "-"
-      # (e.g. owner "hei-"). For such owners the image is built but not pushed.
+      # (e.g. an owner named "name-"). For such owners the image is built but not pushed.
       - id: target
         run: |
           owner="$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')"
