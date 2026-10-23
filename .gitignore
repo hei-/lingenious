@@ -1,0 +1,31 @@
+# secrets / local state
+.env
+out/
+
+# personal notes for AI coding agents / humans
+CLAUDE.local.md
+AGENTS.local.md
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+.venv/
+
+# evaluation: keep the summary data, drop per-run scratch directories
+eval/results/runs/
+eval/results_dfm/runs/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# web app state
+data/
+web/ui/node_modules/
+web/ui/dist/

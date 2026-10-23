@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lingenious 零件匠</title>
+<meta name="description" content="Lingenious: an open-source parametric CAD agent for CNC machining. The LLM designs, the geometry kernel judges.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="css/style.css">
+<script>
+  // set theme before paint to avoid a flash
+  try { var t = localStorage.getItem('lg-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#top"><span class="brand-zh">零件匠</span><span class="brand-en">Lingenious</span></a>
+    <nav>
+      <a href="#replay" data-i18n="nav.replay"></a>
+      <a href="#how" data-i18n="nav.how"></a>
+      <a href="#checks" data-i18n="nav.checks"></a>
+      <a href="#results" data-i18n="nav.results"></a>
+      <a href="#run" data-i18n="nav.run"></a>
+    </nav>
+    <div class="tools">
+      <button id="lang" type="button" class="btn-ghost" aria-label="Language"></button>
+      <button id="theme" type="button" class="btn-ghost" data-i18n-attr="aria-label:ui.theme" aria-label="Theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero wrap">
+  <p class="kicker" data-i18n="hero.kicker"></p>
+  <h1 data-i18n="hero.title"></h1>
+  <p class="lede" data-i18n="hero.lede"></p>
+  <p class="cta">
+    <a class="btn" href="#replay" data-i18n="hero.cta1"></a>
+    <a class="btn btn-quiet" href="https://github.com/hei-/lingenious" data-i18n="hero.cta2"></a>
+  </p>
+  <div class="idea">
+    <div>
+      <h2 class="small" data-i18n="hero.idea.h"></h2>
+      <p data-i18n="hero.idea.p"></p>
+    </div>
+    <div class="idea-pair" aria-hidden="true">
+      <span class="chip chip-llm">LLM → CadQuery</span>
+      <span class="arrow">→</span>
+      <span class="chip chip-code">OCCT B-Rep → L1 · L2 · L3</span>
+    </div>
+  </div>
+  <p class="muted scope" data-i18n="hero.scope"></p>
+</section>
+
+<!-- REPLAY -->
+<section id="replay" class="wrap sec">
+  <h2 data-i18n="replay.h"></h2>
+  <p class="sec-lede" data-i18n="replay.p"></p>
+
+  <div class="req">
+    <span class="label" data-i18n="replay.req"></span>
+    <p id="req-text" lang="zh-CN"></p>
+  </div>
+
+  <div class="replay" id="replay-app">
+    <div class="rp-side">
+      <div class="label" data-i18n="replay.rounds"></div>
+      <ol class="timeline" id="timeline"></ol>
+      <div class="rp-ctl">
+        <button type="button" class="btn-ghost" id="rp-prev" data-i18n-attr="aria-label:replay.prev" aria-label="Previous">←</button>
+        <button type="button" class="btn-ghost" id="rp-play" data-i18n="replay.play"></button>
+        <button type="button" class="btn-ghost" id="rp-next" data-i18n-attr="aria-label:replay.next" aria-label="Next">→</button>
+      </div>
+      <div class="grid-wrap">
+        <div class="label" data-i18n="replay.grid"></div>
+        <div id="rule-grid" class="rule-grid"></div>
+        <p class="muted tiny" data-i18n="replay.grid.note"></p>
+      </div>
+    </div>
+
+    <div class="rp-main">
+      <div class="viewer" id="viewer">
+        <canvas id="gl"></canvas>
+        <img id="gl-fallback" alt="" hidden>
+        <div class="v-tools">
+          <label><input type="checkbox" id="v-edges" checked> <span data-i18n="replay.edges"></span></label>
+          <label><input type="checkbox" id="v-marker" checked> <span data-i18n="replay.marker"></span></label>
+          <button type="button" class="btn-ghost sm" id="v-reset" data-i18n="replay.reset"></button>
+        </div>
+        <div class="v-hint tiny muted" id="v-hint" data-i18n="replay.drag"></div>
+      </div>
+
+      <h3 data-i18n="replay.issues"></h3>
+      <div id="issues"></div>
+
+      <h3 data-i18n="replay.code"></h3>
+      <p class="tiny muted" id="code-note"></p>
+      <pre class="code" id="code" tabindex="0"></pre>
+    </div>
+  </div>
+
+  <p class="muted tiny" id="usage"></p>
+
+  <h3 class="final-h" data-i18n="replay.final"></h3>
+  <div class="final">
+    <figure>
+      <a href="assets/drawing.png" target="_blank" rel="noopener"><img src="assets/drawing.png" width="2149" height="1520" loading="lazy" alt="Three-view drawing of the bracket"></a>
+      <figcaption><b data-i18n="replay.drawing"></b><br><span class="muted" data-i18n="replay.drawing.note"></span></figcaption>
+    </figure>
+    <div class="final-side">
+      <figure>
+        <img src="assets/render.png" width="1210" height="880" loading="lazy" alt="Render of the bracket">
+        <figcaption><b data-i18n="replay.render"></b></figcaption>
+      </figure>
+      <div class="spec">
+        <h4 data-i18n="replay.spec"></h4>
+        <div id="spec"></div>
+        <p class="tiny muted" data-i18n="replay.spec.note"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how" class="wrap sec">
+  <h2 data-i18n="how.h"></h2>
+  <p class="sec-lede" data-i18n="how.p"></p>
+  <div class="how">
+    <figure class="diagram">
+      <svg viewBox="0 0 380 580" role="img" aria-labelledby="dg-t" xmlns="http://www.w3.org/2000/svg">
+        <title id="dg-t">Lingenious pipeline</title>
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1 L9 5 L0 9z" class="svg-arrow"/></marker>
+        </defs>
+        <g class="svg-node code"><rect x="60" y="10" width="240" height="44" rx="6"/><text x="180" y="37" data-i18n="svg.req"></text></g>
+        <path class="svg-line" d="M180 54V82" marker-end="url(#ah)"/>
+        <g class="svg-node llm"><rect x="60" y="84" width="240" height="52" rx="6"/><text x="180" y="107" data-i18n="svg.spec"></text><text class="sub" x="180" y="124" data-i18n="svg.spec2"></text></g>
+        <path class="svg-line" d="M180 136V164" marker-end="url(#ah)"/>
+        <g class="svg-node llm"><rect x="60" y="166" width="240" height="52" rx="6"/><text x="180" y="189" data-i18n="svg.script"></text><text class="sub" x="180" y="206" data-i18n="svg.script2"></text></g>
+        <path class="svg-line" d="M180 218V246" marker-end="url(#ah)"/>
+        <g class="svg-node code"><rect x="60" y="248" width="240" height="52" rx="6"/><text x="180" y="271" data-i18n="svg.sandbox"></text><text class="sub" x="180" y="288" data-i18n="svg.sandbox2"></text></g>
+        <path class="svg-line" d="M180 300V328" marker-end="url(#ah)"/>
+        <g class="svg-node code"><rect x="60" y="330" width="240" height="52" rx="6"/><text x="180" y="353" data-i18n="svg.brep"></text><text class="sub" x="180" y="370" data-i18n="svg.brep2"></text></g>
+        <path class="svg-line" d="M180 382V398M60 398H300"/>
+        <path class="svg-line" d="M60 398V412M180 398V412M300 398V412" marker-end="url(#ah)"/>
+        <g class="svg-node code"><rect x="10" y="414" width="100" height="38" rx="6"/><text x="60" y="438" data-i18n="svg.l1"></text></g>
+        <g class="svg-node code"><rect x="130" y="414" width="100" height="38" rx="6"/><text x="180" y="438" data-i18n="svg.l2"></text></g>
+        <g class="svg-node code"><rect x="250" y="414" width="100" height="38" rx="6"/><text x="300" y="438" data-i18n="svg.l3"></text></g>
+        <path class="svg-line" d="M60 452V468H300V452"/>
+        <path class="svg-line" d="M180 468V506" marker-end="url(#ah)"/>
+        <text class="svg-lab" x="188" y="492" text-anchor="start" data-i18n="svg.pass"></text>
+        <g class="svg-node code"><rect x="40" y="508" width="280" height="44" rx="6"/><text x="180" y="535" data-i18n="svg.out"></text></g>
+        <!-- feedback loop -->
+        <path class="svg-line loop" d="M350 433H366V192H300" marker-end="url(#ah)" fill="none"/>
+        <text class="svg-lab vert" transform="translate(330 300) rotate(-90)" text-anchor="middle" data-i18n="svg.fail"></text>
+        <text class="svg-lab vert sm" transform="translate(344 300) rotate(-90)" text-anchor="middle" data-i18n="svg.max"></text>
+      </svg>
+      <figcaption class="legend tiny">
+        <span class="sw sw-llm"></span> <span data-i18n="how.legend.llm"></span>
+        <span class="sw sw-code"></span> <span data-i18n="how.legend.code"></span>
+      </figcaption>
+    </figure>
+    <ol class="steps">
+      <li><h3 data-i18n="how.s1.h"></h3><p data-i18n="how.s1.p"></p></li>
+      <li><h3 data-i18n="how.s2.h"></h3><p data-i18n="how.s2.p"></p></li>
+      <li><h3 data-i18n="how.s3.h"></h3><p data-i18n="how.s3.p"></p></li>
+      <li><h3 data-i18n="how.s4.h"></h3><p data-i18n="how.s4.p"></p></li>
+      <li><h3 data-i18n="how.s5.h"></h3><p data-i18n="how.s5.p"></p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- CHECKS -->
+<section id="checks" class="wrap sec">
+  <h2 data-i18n="checks.h"></h2>
+  <p class="sec-lede" data-i18n="checks.p"></p>
+  <p class="callout" data-i18n="checks.warn"></p>
+  <div class="tbl-scroll">
+    <table class="rules">
+      <thead><tr><th data-i18n="checks.col.level"></th><th data-i18n="checks.col.rule"></th><th data-i18n="checks.col.what"></th><th data-i18n="checks.col.thr"></th></tr></thead>
+      <tbody>
+        <tr><td>L0</td><td><code>execute</code></td><td data-i18n="checks.l0"></td><td class="muted" data-i18n="checks.l0t"></td></tr>
+        <tr class="grp"><td>L1</td><td><code>valid_solid</code></td><td data-i18n="checks.l1a"></td><td></td></tr>
+        <tr><td></td><td><code>single_solid</code></td><td data-i18n="checks.l1b"></td><td></td></tr>
+        <tr><td></td><td><code>positive_volume</code></td><td data-i18n="checks.l1c"></td><td></td></tr>
+        <tr><td></td><td><code>no_tiny_features</code></td><td data-i18n="checks.l1d"></td><td class="muted" data-i18n="checks.planned"></td></tr>
+        <tr class="grp"><td>L2</td><td><code>bbox_match</code></td><td data-i18n="checks.l2a"></td><td class="muted" data-i18n="checks.l2t"></td></tr>
+        <tr><td></td><td><code>hole_count</code></td><td data-i18n="checks.l2b"></td><td></td></tr>
+        <tr><td></td><td><code>hole_diameter</code></td><td data-i18n="checks.l2c"></td><td class="muted" data-i18n="checks.l2t"></td></tr>
+        <tr><td></td><td><code>hole_position</code></td><td data-i18n="checks.l2d"></td><td class="muted" data-i18n="checks.l2t"></td></tr>
+        <tr><td></td><td><code>volume_range</code></td><td data-i18n="checks.l2e"></td><td></td></tr>
+        <tr class="grp"><td>L3</td><td><code>min_wall_thickness</code></td><td data-i18n="checks.l3a"></td><td data-i18n="checks.l3a.t"></td></tr>
+        <tr><td></td><td><code>hole_edge_distance</code></td><td data-i18n="checks.l3b"></td><td data-i18n="checks.l3b.t"></td></tr>
+        <tr><td></td><td><code>internal_corner_radius</code></td><td data-i18n="checks.l3c"></td><td data-i18n="checks.l3c.t"></td></tr>
+        <tr><td></td><td><code>hole_spacing</code></td><td data-i18n="checks.l3d"></td><td data-i18n="checks.l3d.t"></td></tr>
+        <tr><td></td><td><code>hole_depth_ratio</code></td><td data-i18n="checks.l3e"></td><td data-i18n="checks.l3e.t"></td></tr>
+        <tr><td></td><td><code>deep_pocket</code></td><td data-i18n="checks.l3f"></td><td data-i18n="checks.l3f.t"></td></tr>
+        <tr><td></td><td><code>thin_web_height</code></td><td data-i18n="checks.l3g"></td><td data-i18n="checks.l3g.t"></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="tiny muted" data-i18n="checks.dispute"></p>
+</section>
+
+<!-- RESULTS -->
+<section id="results" class="wrap sec">
+  <h2 data-i18n="res.h"></h2>
+  <p class="sec-lede" data-i18n="res.p"></p>
+
+  <h3 data-i18n="res.main.h"></h3>
+  <div class="tbl-scroll"><table class="num" id="t-main"></table></div>
+  <p class="tiny muted" data-i18n="res.bar"></p>
+  <p data-i18n="res.main.diff"></p>
+  <ul class="notes">
+    <li data-i18n="res.main.1"></li><li data-i18n="res.main.2"></li><li data-i18n="res.main.3"></li><li data-i18n="res.main.4"></li>
+  </ul>
+
+  <h3 data-i18n="res.dfm.h"></h3>
+  <div class="tbl-scroll"><table class="num" id="t-dfm"></table></div>
+  <ul class="notes">
+    <li data-i18n="res.dfm.1"></li><li data-i18n="res.dfm.2"></li><li data-i18n="res.dfm.3"></li><li data-i18n="res.dfm.4"></li>
+  </ul>
+  <p class="callout" data-i18n="res.caveat"></p>
+</section>
+
+<!-- OUTPUTS -->
+<section id="outputs" class="wrap sec">
+  <h2 data-i18n="out.h"></h2>
+  <p class="sec-lede" data-i18n="out.p"></p>
+  <div class="cards">
+    <div class="card"><h3 data-i18n="out.step"></h3><p data-i18n="out.step.p"></p></div>
+    <div class="card"><h3 data-i18n="out.script"></h3><p data-i18n="out.script.p"></p></div>
+    <div class="card"><h3 data-i18n="out.drawing"></h3><p data-i18n="out.drawing.p"></p></div>
+    <div class="card"><h3 data-i18n="out.report"></h3><p data-i18n="out.report.p"></p></div>
+  </div>
+</section>
+
+<!-- RUN -->
+<section id="run" class="wrap sec">
+  <h2 data-i18n="run.h"></h2>
+  <p class="sec-lede" data-i18n="run.p"></p>
+  <div class="two">
+    <div>
+      <h3 data-i18n="run.cli"></h3>
+      <pre class="code sh" lang="zh-CN"><code>git clone https://github.com/hei-/lingenious
+cd lingenious
+cp .env.example .env     # DEEPSEEK_API_KEY=...
+
+scripts/run.sh bracket \
+  "L 型铝支架:底板 100×60×6mm,立板沿长边,高 40mm、厚 3mm,底板四角各一个 M6 通孔,立板中间一个直径 20 的圆孔。" \
+  --material 6061 --modify "立板厚度改成 4mm"
+
+# results: ./out/bracket/v1/ and v2/</code></pre>
+      <p class="tiny muted" data-i18n="run.note"></p>
+    </div>
+    <div>
+      <h3 data-i18n="run.web"></h3>
+      <pre class="code sh"><code>docker compose up</code></pre>
+      <p class="tiny muted" data-i18n="run.web.p"></p>
+    </div>
+  </div>
+
+  <h2 class="lim-h" data-i18n="lim.h"></h2>
+  <ul class="notes lim">
+    <li data-i18n="lim.1"></li><li data-i18n="lim.2"></li><li data-i18n="lim.3"></li><li data-i18n="lim.4"></li>
+    <li data-i18n="lim.5"></li><li data-i18n="lim.6"></li><li data-i18n="lim.7"></li><li data-i18n="lim.8"></li>
+  </ul>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p><a class="btn" href="https://github.com/hei-/lingenious" data-i18n="foot.gh"></a></p>
+    <p class="tiny muted" data-i18n="foot.p"></p>
+  </div>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

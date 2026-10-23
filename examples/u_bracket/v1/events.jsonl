@@ -1,0 +1,21 @@
+{"event": "parsing", "data": {}}
+{"event": "spec", "data": {"part_type": "U型支架", "material": "6061", "process": "cnc_milling", "features": [{"id": "F1", "type": "base_plate", "dims": {"length": 80.0, "width": 50.0, "thickness": 4.0}, "note": "U型支架底板"}, {"id": "F2", "type": "side_wall", "dims": {"length": 80.0, "height": 35.0, "thickness": 4.0}, "note": "一侧立板，高35含底板厚度"}, {"id": "F3", "type": "side_wall", "dims": {"length": 80.0, "height": 35.0, "thickness": 4.0}, "note": "另一侧立板，高35含底板厚度"}, {"id": "H1", "type": "hole", "dims": {"diameter": 8.0}, "note": "一侧壁通孔"}, {"id": "H2", "type": "hole", "dims": {"diameter": 8.0}, "note": "另一侧壁通孔"}], "assertions": {"bbox": {"x": 80.0, "y": 50.0, "z": 35.0, "tol": 0.5}, "hole_count": 2, "hole_diameters": [8.0, 8.0], "diameter_tol": 0.1, "volume_range": null, "hole_positions": [{"diameter": 8.0, "axis": "Y", "x": 0.0, "y": null, "z": 17.5, "tol": 1.0}, {"diameter": 8.0, "axis": "Y", "x": 0.0, "y": null, "z": 17.5, "tol": 1.0}]}, "defaults_used": ["侧壁孔沿长度方向居中（x=0）", "侧壁孔沿高度方向居中于该壁（z=17.5）", "侧壁孔按通孔处理", "壁厚4mm为立板厚度，高度35mm为含底板的总高"], "missing": []}}
+{"event": "generating", "data": {}}
+{"event": "round", "data": {"n": 1, "seconds": 2.39, "exec_ok": true, "issues": [{"rule": "internal_corner_radius", "level": "L3", "severity": "error", "target": "internal_edges", "message": "存在 2 条无圆角的内凹尖角(共长 160.0mm,最长一条位于 (0.0, 21.0, 4.0)),圆角半径 0mm,要求不小于 0.5mm(建议 ≥3mm)", "measured": 0.0, "required": 3.0, "hint": "对这些内凹边添加圆角 fillet,半径取 3mm(最小 0.5mm);在 CadQuery 中先选中内凹边再 fillet,或在建模时对草图拐角加圆角", "location": [0.0, 21.0, 4.0]}], "glb": "rounds/r1.glb"}}
+{"event": "artifact", "data": {"name": "rounds/r1.glb"}}
+{"event": "fixing", "data": {"n": 1}}
+{"event": "round", "data": {"n": 2, "seconds": 1.9, "exec_ok": false, "issues": [{"rule": "exec_error", "level": "L0", "severity": "error", "target": "", "message": "脚本执行失败:  File \"/app/core/sandbox/runner.py\", line 13, in main\n    exec(compile(code, \"script.py\", \"exec\"), ns)\n  File \"script.py\", line 39, in <module>\n    inner_edges = inner_edges.union(body.edges(cq.selectors.BoxSelector(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/cadquery/cq.py\", line 3385, in union\n    raise ValueError(\nValueError: Workplane object must have at least one solid on the stack to union!", "measured": null, "required": null, "hint": "", "location": null}]}}
+{"event": "fixing", "data": {"n": 2}}
+{"event": "round", "data": {"n": 3, "seconds": 2.88, "exec_ok": true, "issues": [], "glb": "rounds/r3.glb"}}
+{"event": "artifact", "data": {"name": "rounds/r3.glb"}}
+{"event": "artifact", "data": {"name": "part.py"}}
+{"event": "artifact", "data": {"name": "part.step"}}
+{"event": "artifact", "data": {"name": "run.json"}}
+{"event": "artifact", "data": {"name": "log.txt"}}
+{"event": "artifact", "data": {"name": "render.png"}}
+{"event": "artifact", "data": {"name": "thumb.png"}}
+{"event": "artifact", "data": {"name": "part.glb"}}
+{"event": "artifact", "data": {"name": "drawing.pdf"}}
+{"event": "artifact", "data": {"name": "drawing.dxf"}}
+{"event": "artifact", "data": {"name": "drawing.png"}}
+{"event": "done", "data": {"status": "success", "version": 1, "usage": {"calls": 4, "prompt_tokens": 6653, "completion_tokens": 2464}}}

@@ -1,0 +1,16 @@
+{"event": "parsing", "data": {}}
+{"event": "spec", "data": {"part_type": "矩形安装板", "material": "6061", "process": "cnc_milling", "features": [{"id": "F1", "type": "through_hole", "dims": {"diameter": 9.0}, "note": "四角各一个 M8 通孔"}, {"id": "F2", "type": "through_hole", "dims": {"diameter": 30.0}, "note": "中心圆孔"}, {"id": "F3", "type": "chamfer", "dims": {"radius": 3.0}, "note": "四周倒角 R3"}], "assertions": {"bbox": {"x": 120.0, "y": 80.0, "z": 8.0, "tol": 0.5}, "hole_count": 5, "hole_diameters": [9.0, 9.0, 9.0, 9.0, 30.0], "diameter_tol": 0.1, "volume_range": null, "hole_positions": [{"diameter": 9.0, "axis": "Z", "x": -42.0, "y": -22.0, "z": null, "tol": 1.0}, {"diameter": 9.0, "axis": "Z", "x": 42.0, "y": -22.0, "z": null, "tol": 1.0}, {"diameter": 9.0, "axis": "Z", "x": -42.0, "y": 22.0, "z": null, "tol": 1.0}, {"diameter": 9.0, "axis": "Z", "x": 42.0, "y": 22.0, "z": null, "tol": 1.0}, {"diameter": 30.0, "axis": "Z", "x": 0.0, "y": 0.0, "z": null, "tol": 1.0}]}, "defaults_used": ["M8 通孔按 9.0mm", "四角孔边距取 max(12, 2×孔径)=18mm", "孔深按通孔", "倒角按 45° 等边倒角"], "missing": []}}
+{"event": "generating", "data": {}}
+{"event": "round", "data": {"n": 1, "seconds": 2.37, "exec_ok": true, "issues": [], "glb": "rounds/r1.glb"}}
+{"event": "artifact", "data": {"name": "rounds/r1.glb"}}
+{"event": "artifact", "data": {"name": "part.py"}}
+{"event": "artifact", "data": {"name": "part.step"}}
+{"event": "artifact", "data": {"name": "run.json"}}
+{"event": "artifact", "data": {"name": "log.txt"}}
+{"event": "artifact", "data": {"name": "render.png"}}
+{"event": "artifact", "data": {"name": "thumb.png"}}
+{"event": "artifact", "data": {"name": "part.glb"}}
+{"event": "artifact", "data": {"name": "drawing.pdf"}}
+{"event": "artifact", "data": {"name": "drawing.dxf"}}
+{"event": "artifact", "data": {"name": "drawing.png"}}
+{"event": "done", "data": {"status": "success", "version": 1, "usage": {"calls": 2, "prompt_tokens": 2432, "completion_tokens": 851}}}

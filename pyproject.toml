@@ -1,0 +1,77 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lingenious"
+version = "0.1.0"
+description = "LLM-driven CadQuery CAD agent: spec, generate, check (DFM), drawing, web app"
+readme = "README.md"
+license = { file = "LICENSE" }
+# cadquery 2.5.2 (cadquery-ocp) has no wheels for Python 3.13 yet
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "cadquery==2.5.2",
+    "openai>=1.40,<3",
+    "pydantic>=2.6,<3",
+    "pyyaml>=6,<7",
+    "matplotlib>=3.8,<4",
+    "numpy>=1.26,<3",
+    "ezdxf>=1.1,<2",
+    "fastapi>=0.110,<1",
+    "uvicorn[standard]>=0.29,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+    "httpx>=0.27,<1",  # fastapi TestClient
+    "ruff>=0.6",
+    "mypy>=1.10,<2",
+    "types-PyYAML",
+    "pytest-cov>=5",
+]
+
+[tool.setuptools.packages.find]
+include = ["core*", "adapters*", "eval*", "web*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q -p no:warnings"
+markers = ["slow: builds every reference solid (~70% of the suite runtime); deselect with -m \"not slow\""]
+
+[tool.ruff]
+line-length = 140
+target-version = "py310"
+extend-exclude = ["web/ui", "web/landing", "out", "data"]
+
+[tool.ruff.lint]
+# pyflakes + pycodestyle errors only; style/format rules are deliberately not enforced
+select = ["E4", "E7", "E9", "F"]
+# the code base uses compact style on purpose: `a; b`, one-line lambdas, short names like `l`
+ignore = ["E701", "E702", "E731", "E741"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/test_drawing.py" = ["E402"]  # imports follow a skip guard
+
+[tool.mypy]
+python_version = "3.12"
+files = ["core", "web/server", "adapters", "eval"]
+exclude = ["^eval/results"]   # generated per-run scripts
+ignore_missing_imports = true   # cadquery / OCP / ezdxf / matplotlib ship no usable stubs
+warn_unused_ignores = false
+check_untyped_defs = false
+disable_error_code = ["annotation-unchecked"]
+show_error_codes = true
+
+[tool.coverage.run]
+source = ["core", "web/server", "adapters", "eval"]
+omit = ["tests/*", "eval/results/*", "eval/results_dfm/*"]
+
+[tool.coverage.report]
+skip_empty = true
+
+# Modules with known type errors (5 errors across 3 modules); TODO: fix them and remove this override
+[[tool.mypy.overrides]]
+module = ["web.server.store", "web.server.app", "core.checks.features"]
+ignore_errors = true

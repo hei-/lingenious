@@ -1,0 +1,42 @@
+name: DFM rule proposal
+description: Propose a new manufacturability rule or change a threshold
+labels: [dfm-rule]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thresholds must be traceable. Please cite where the number comes from (standard, handbook, or a named process engineer's input).
+        Unsourced numbers are accepted only if labeled "rule of thumb" in code and docs.
+  - type: input
+    id: process
+    attributes:
+      label: "Process"
+      placeholder: "3-axis milling / turning / sheet metal / ..."
+    validations: {required: true}
+  - type: textarea
+    id: rule
+    attributes:
+      label: "Rule and threshold"
+      description: "What is flagged, the numeric limit, units, and the geometry it applies to"
+    validations: {required: true}
+  - type: textarea
+    id: source
+    attributes:
+      label: "Source / reference"
+      description: "Standard (number, clause), handbook (title, page), or process engineer input (role, shop, date)"
+    validations: {required: true}
+  - type: dropdown
+    id: confidence
+    attributes:
+      label: Source type
+      options: [standard, handbook, process engineer input, rule of thumb]
+    validations: {required: true}
+  - type: textarea
+    id: examples
+    attributes:
+      label: "Example geometry"
+      description: "Part that should trigger it and one that should not (script or description)"
+  - type: textarea
+    id: fix
+    attributes:
+      label: "Suggested hint to the designer"

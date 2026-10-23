@@ -1,0 +1,116 @@
+{
+  "status": "success",
+  "spec": {
+    "part_type": "矩形安装板",
+    "material": "6061",
+    "process": "cnc_milling",
+    "features": [
+      {
+        "id": "F1",
+        "type": "through_hole",
+        "dims": {
+          "diameter": 9.0
+        },
+        "note": "四角各一个 M8 通孔"
+      },
+      {
+        "id": "F2",
+        "type": "through_hole",
+        "dims": {
+          "diameter": 30.0
+        },
+        "note": "中心圆孔"
+      },
+      {
+        "id": "F3",
+        "type": "chamfer",
+        "dims": {
+          "radius": 3.0
+        },
+        "note": "四周倒角 R3"
+      }
+    ],
+    "assertions": {
+      "bbox": {
+        "x": 120.0,
+        "y": 80.0,
+        "z": 8.0,
+        "tol": 0.5
+      },
+      "hole_count": 5,
+      "hole_diameters": [
+        9.0,
+        9.0,
+        9.0,
+        9.0,
+        30.0
+      ],
+      "diameter_tol": 0.1,
+      "volume_range": null,
+      "hole_positions": [
+        {
+          "diameter": 9.0,
+          "axis": "Z",
+          "x": -42.0,
+          "y": -22.0,
+          "z": null,
+          "tol": 1.0
+        },
+        {
+          "diameter": 9.0,
+          "axis": "Z",
+          "x": 42.0,
+          "y": -22.0,
+          "z": null,
+          "tol": 1.0
+        },
+        {
+          "diameter": 9.0,
+          "axis": "Z",
+          "x": -42.0,
+          "y": 22.0,
+          "z": null,
+          "tol": 1.0
+        },
+        {
+          "diameter": 9.0,
+          "axis": "Z",
+          "x": 42.0,
+          "y": 22.0,
+          "z": null,
+          "tol": 1.0
+        },
+        {
+          "diameter": 30.0,
+          "axis": "Z",
+          "x": 0.0,
+          "y": 0.0,
+          "z": null,
+          "tol": 1.0
+        }
+      ]
+    },
+    "defaults_used": [
+      "M8 通孔按 9.0mm",
+      "四角孔边距取 max(12, 2×孔径)=18mm",
+      "孔深按通孔",
+      "倒角按 45° 等边倒角"
+    ],
+    "missing": []
+  },
+  "rounds": [
+    {
+      "n": 1,
+      "seconds": 2.37,
+      "code": "import cadquery as cq\n\n# ---------------- parameters ----------------\nPLATE_L = 120.0          # length along X\nPLATE_W = 80.0           # width along Y\nPLATE_T = 8.0            # thickness along Z\n\nCORNER_HOLE_D = 9.0      # M8 clearance through hole\nCORNER_HOLE_X = 42.0     # absolute X of corner holes\nCORNER_HOLE_Y = 22.0     # absolute Y of corner holes\n\nCENTER_HOLE_D = 30.0     # central through hole\n\nCHAMFER_R = 3.0          # edge chamfer (45 deg, R3)\n\n# ---------------- feature: base ----------------\nbody = cq.Workplane(\"XY\").box(PLATE_L, PLATE_W, PLATE_T, centered=(True, True, False))\n\n# ---------------- feature: F3 chamfer (four vertical corner edges) ----------------\nbody = body.edges(\"|Z\").chamfer(CHAMFER_R)\n\n# ---------------- feature: F1 corner through holes ----------------\ncorner_pts = [\n    (-CORNER_HOLE_X, -CORNER_HOLE_Y),\n    ( CORNER_HOLE_X, -CORNER_HOLE_Y),\n    (-CORNER_HOLE_X,  CORNER_HOLE_Y),\n    ( CORNER_HOLE_X,  CORNER_HOLE_Y),\n]\nbody = body.cut(\n    cq.Workplane(\"XY\").pushPoints(corner_pts)\n    .circle(CORNER_HOLE_D / 2).extrude(PLATE_T)\n)\n\n# ---------------- feature: F2 central through hole ----------------\nbody = body.cut(\n    cq.Workplane(\"XY\").pushPoints([(0.0, 0.0)])\n    .circle(CENTER_HOLE_D / 2).extrude(PLATE_T)\n)\n\nresult = body",
+      "issues": [],
+      "glb": "rounds/r1.glb"
+    }
+  ],
+  "final_issues": [],
+  "usage": {
+    "calls": 2,
+    "prompt_tokens": 2432,
+    "completion_tokens": 851
+  }
+}

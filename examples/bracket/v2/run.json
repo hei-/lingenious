@@ -1,0 +1,185 @@
+{
+  "status": "success",
+  "spec": {
+    "part_type": "L型支架",
+    "material": "6061",
+    "process": "cnc_milling",
+    "features": [
+      {
+        "id": "base_plate",
+        "type": "plate",
+        "dims": {
+          "length": 100.0,
+          "width": 60.0,
+          "thickness": 6.0
+        },
+        "note": "底板"
+      },
+      {
+        "id": "vertical_plate",
+        "type": "plate",
+        "dims": {
+          "length": 100.0,
+          "height": 40.0,
+          "thickness": 4.0
+        },
+        "note": "立板沿长边，位于底板一侧"
+      },
+      {
+        "id": "corner_hole_1",
+        "type": "hole",
+        "dims": {
+          "diameter": 6.6
+        },
+        "note": "底板四角 M6 通孔"
+      },
+      {
+        "id": "corner_hole_2",
+        "type": "hole",
+        "dims": {
+          "diameter": 6.6
+        },
+        "note": "底板四角 M6 通孔"
+      },
+      {
+        "id": "corner_hole_3",
+        "type": "hole",
+        "dims": {
+          "diameter": 6.6
+        },
+        "note": "底板四角 M6 通孔"
+      },
+      {
+        "id": "corner_hole_4",
+        "type": "hole",
+        "dims": {
+          "diameter": 6.6
+        },
+        "note": "底板四角 M6 通孔"
+      },
+      {
+        "id": "vertical_hole",
+        "type": "hole",
+        "dims": {
+          "diameter": 20.0
+        },
+        "note": "立板中间圆孔，通孔"
+      }
+    ],
+    "assertions": {
+      "bbox": {
+        "x": 100.0,
+        "y": 60.0,
+        "z": 46.0,
+        "tol": 0.5
+      },
+      "hole_count": 5,
+      "hole_diameters": [
+        6.6,
+        6.6,
+        6.6,
+        6.6,
+        20.0
+      ],
+      "diameter_tol": 0.1,
+      "volume_range": null,
+      "hole_positions": [
+        {
+          "diameter": 6.6,
+          "axis": "Z",
+          "x": -36.8,
+          "y": -16.8,
+          "z": null,
+          "tol": 1.0
+        },
+        {
+          "diameter": 6.6,
+          "axis": "Z",
+          "x": 36.8,
+          "y": -16.8,
+          "z": null,
+          "tol": 1.0
+        },
+        {
+          "diameter": 6.6,
+          "axis": "Z",
+          "x": -36.8,
+          "y": 16.8,
+          "z": null,
+          "tol": 1.0
+        },
+        {
+          "diameter": 6.6,
+          "axis": "Z",
+          "x": 36.8,
+          "y": 16.8,
+          "z": null,
+          "tol": 1.0
+        },
+        {
+          "diameter": 20.0,
+          "axis": "Y",
+          "x": 0.0,
+          "y": null,
+          "z": 26.0,
+          "tol": 1.0
+        }
+      ]
+    },
+    "defaults_used": [
+      "M6 通孔按 6.6mm",
+      "四角孔边距取 max(12, 2×孔径)=13.2mm",
+      "立板圆孔沿长度方向居中、沿高度方向居中于立板",
+      "立板圆孔按通孔",
+      "立板位于底板宽度一侧，外侧面与底板边缘齐平"
+    ],
+    "missing": []
+  },
+  "rounds": [
+    {
+      "n": 4,
+      "seconds": 2.13,
+      "code": "# ASSERTION_DISPUTE: thin_web_height\nimport cadquery as cq\n\n# ---------------- parameters ----------------\nBASE_L = 100.0          # base plate length (X)\nBASE_W = 60.0           # base plate width (Y)\nBASE_T = 6.0            # base plate thickness (Z)\n\nWALL_H = 40.0           # vertical plate height above base top\nWALL_T = 4.0            # vertical plate thickness (Y)\n\nCORNER_HOLE_D = 6.6     # M6 clearance hole diameter\nCORNER_HOLE_X = 36.8    # corner hole |x| position\nCORNER_HOLE_Y = 16.8    # corner hole |y| position\n\nWALL_HOLE_D = 20.0      # vertical plate hole diameter\nWALL_HOLE_Z = 26.0      # hole centre height (from base bottom)\n\nINNER_FILLET_R = 3.0    # inner corner fillet radius (base top / wall)\n\n# ---------------- feature: base ----------------\nbody = cq.Workplane(\"XY\").box(BASE_L, BASE_W, BASE_T, centered=(True, True, False))\n\n# ---------------- feature: vertical_plate ----------------\n# wall sits along the -Y long edge, outer face flush with base edge\nwall = (cq.Workplane(\"XY\").workplane(offset=BASE_T)\n        .center(0, -BASE_W / 2 + WALL_T / 2)\n        .rect(BASE_L, WALL_T)\n        .extrude(WALL_H))\nbody = body.union(wall)\n\n# ---------------- feature: inner_fillet (base top / wall junction) ----------------\n# fillet the concave inner edge where the wall meets the base top face\nbody = body.edges(cq.selectors.BoxSelector(\n    (-BASE_L / 2 - 1.0, -BASE_W / 2 + WALL_T - 0.1, BASE_T - 0.1),\n    (BASE_L / 2 + 1.0, -BASE_W / 2 + WALL_T + 0.1, BASE_T + 0.1))).fillet(INNER_FILLET_R)\n\n# ---------------- feature: corner holes (M6, through base) ----------------\ncorner_pts = [(sx * CORNER_HOLE_X, sy * CORNER_HOLE_Y)\n              for sx in (-1, 1) for sy in (-1, 1)]\nbody = body.cut(cq.Workplane(\"XY\").pushPoints(corner_pts)\n                .circle(CORNER_HOLE_D / 2).extrude(BASE_T))\n\n# ---------------- feature: vertical_hole (D20, through wall along Y) ----------------\n# cylinder axis along Y, centred at x=0, z=WALL_HOLE_Z, spanning full wall thickness\n# build on XY plane, extrude along Y using a rotated workplane with explicit origin\nhole = (cq.Workplane(\"XY\")\n        .workplane(origin=(0, 0, 0))\n        .center(0, 0)\n        .transformed(offset=(0, 0, 0), rotate=(90, 0, 0))\n        .center(0, WALL_HOLE_Z)\n        .circle(WALL_HOLE_D / 2)\n        .extrude(BASE_W + 2.0))\nbody = body.cut(hole)\n\nresult = body",
+      "issues": [
+        {
+          "rule": "thin_web_height",
+          "level": "L3",
+          "severity": "warning",
+          "target": "(-0.0, -28.0, 46.0)",
+          "message": "薄筋/薄壁(顶面位于 (-0.0, -28.0, 46.0) 附近)高 37.0mm,厚 4.0mm,高厚比 9.3,超过建议值 8(加工易振刀、变形)",
+          "measured": 9.25,
+          "required": 8.0,
+          "hint": "将厚度增加到至少 4.6mm,或把高度降到不超过 32.0mm,或在根部加圆角/增设加强筋",
+          "location": [
+            -0.0,
+            -28.0,
+            46.0
+          ]
+        }
+      ],
+      "glb": "rounds/r4.glb"
+    }
+  ],
+  "final_issues": [
+    {
+      "rule": "thin_web_height",
+      "level": "L3",
+      "severity": "warning",
+      "target": "(-0.0, -28.0, 46.0)",
+      "message": "薄筋/薄壁(顶面位于 (-0.0, -28.0, 46.0) 附近)高 37.0mm,厚 4.0mm,高厚比 9.3,超过建议值 8(加工易振刀、变形)",
+      "measured": 9.25,
+      "required": 8.0,
+      "hint": "将厚度增加到至少 4.6mm,或把高度降到不超过 32.0mm,或在根部加圆角/增设加强筋",
+      "location": [
+        -0.0,
+        -28.0,
+        46.0
+      ]
+    }
+  ],
+  "usage": {
+    "calls": 2,
+    "prompt_tokens": 2950,
+    "completion_tokens": 1697
+  }
+}

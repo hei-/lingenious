@@ -1,0 +1,133 @@
+{
+  "status": "success",
+  "spec": {
+    "part_type": "L型支架",
+    "material": "6061 铝合金",
+    "process": "cnc_milling",
+    "features": [
+      {
+        "id": "base_plate",
+        "type": "底板",
+        "dims": {
+          "length": 100.0,
+          "width": 60.0,
+          "thickness": 6.0
+        },
+        "note": "矩形底板"
+      },
+      {
+        "id": "vertical_plate",
+        "type": "立板",
+        "dims": {
+          "height": 40.0,
+          "thickness": 3.0,
+          "length": 100.0
+        },
+        "note": "沿底板长边，与底板垂直"
+      },
+      {
+        "id": "hole1",
+        "type": "通孔",
+        "dims": {
+          "diameter": 6.6,
+          "x": 12.0,
+          "y": 12.0
+        },
+        "note": "底板四角 M6 通孔，距两边各 12mm"
+      },
+      {
+        "id": "hole2",
+        "type": "通孔",
+        "dims": {
+          "diameter": 6.6,
+          "x": 88.0,
+          "y": 12.0
+        },
+        "note": "底板四角 M6 通孔，距两边各 12mm"
+      },
+      {
+        "id": "hole3",
+        "type": "通孔",
+        "dims": {
+          "diameter": 6.6,
+          "x": 12.0,
+          "y": 48.0
+        },
+        "note": "底板四角 M6 通孔，距两边各 12mm"
+      },
+      {
+        "id": "hole4",
+        "type": "通孔",
+        "dims": {
+          "diameter": 6.6,
+          "x": 88.0,
+          "y": 48.0
+        },
+        "note": "底板四角 M6 通孔，距两边各 12mm"
+      },
+      {
+        "id": "hole5",
+        "type": "通孔",
+        "dims": {
+          "diameter": 20.0,
+          "x": 50.0,
+          "y": 20.0
+        },
+        "note": "立板中心圆孔，沿高度方向居中"
+      }
+    ],
+    "assertions": {
+      "bbox": {
+        "x": 100.0,
+        "y": 60.0,
+        "z": 46.0,
+        "tol": 0.5
+      },
+      "hole_count": 5,
+      "hole_diameters": [
+        6.6,
+        6.6,
+        6.6,
+        6.6,
+        20.0
+      ],
+      "diameter_tol": 0.1,
+      "volume_range": null
+    },
+    "defaults_used": [
+      "M6 通孔按 6.6mm",
+      "四角孔距两边各取 max(12, 2×孔径)=12mm",
+      "立板圆孔沿高度方向居中"
+    ],
+    "missing": []
+  },
+  "rounds": [
+    {
+      "n": 1,
+      "seconds": 3.64,
+      "issues": [
+        {
+          "rule": "internal_corner_radius",
+          "level": "L3",
+          "severity": "error",
+          "target": "internal_edges",
+          "message": "存在 1 条无圆角的内凹尖角(共长 100.0mm,最长一条位于 (0.0, -27.0, 6.0)),圆角半径 0mm,要求不小于 0.5mm(建议 ≥3mm)",
+          "measured": 0.0,
+          "required": 3.0,
+          "hint": "对这些内凹边添加圆角 fillet,半径取 3mm(最小 0.5mm);在 CadQuery 中先选中内凹边再 fillet,或在建模时对草图拐角加圆角"
+        }
+      ]
+    },
+    {
+      "n": 2,
+      "seconds": 2.13,
+      "issues": []
+    }
+  ],
+  "final_issues": [],
+  "usage": {
+    "calls": 3,
+    "prompt_tokens": 3538,
+    "completion_tokens": 1816
+  }
+}

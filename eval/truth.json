@@ -1,0 +1,460 @@
+{
+ "e1": {
+  "bbox": {
+   "x": 100.0,
+   "y": 60.0,
+   "z": 10.0,
+   "tol": 0.5
+  },
+  "hole_count": 4,
+  "hole_diameters": [
+   6.6,
+   6.6,
+   6.6,
+   6.6
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   56873,
+   60390
+  ]
+ },
+ "e2": {
+  "bbox": {
+   "x": 80.0,
+   "y": 80.0,
+   "z": 8.0,
+   "tol": 0.5
+  },
+  "hole_count": 1,
+  "hole_diameters": [
+   20.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   47226,
+   50147
+  ]
+ },
+ "e3": {
+  "bbox": {
+   "x": 120.0,
+   "y": 40.0,
+   "z": 5.0,
+   "tol": 0.5
+  },
+  "hole_count": 3,
+  "hole_diameters": [
+   8.0,
+   8.0,
+   8.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   22549,
+   23943
+  ]
+ },
+ "e4": {
+  "bbox": {
+   "x": 60.0,
+   "y": 60.0,
+   "z": 10.0,
+   "tol": 0.5
+  },
+  "hole_count": 1,
+  "hole_diameters": [
+   12.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   26329,
+   27958
+  ]
+ },
+ "e5": {
+  "bbox": {
+   "x": 90.0,
+   "y": 50.0,
+   "z": 8.0,
+   "tol": 0.5
+  },
+  "hole_count": 0,
+  "hole_diameters": [],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   32759,
+   34785
+  ]
+ },
+ "e6": {
+  "bbox": {
+   "x": 100.0,
+   "y": 70.0,
+   "z": 8.0,
+   "tol": 0.5
+  },
+  "hole_count": 6,
+  "hole_diameters": [
+   6.0,
+   6.0,
+   6.0,
+   6.0,
+   6.0,
+   6.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   53004,
+   56282
+  ]
+ },
+ "e7": {
+  "bbox": {
+   "x": 80.0,
+   "y": 40.0,
+   "z": 10.0,
+   "tol": 0.5
+  },
+  "hole_count": 2,
+  "hole_diameters": [
+   8.0,
+   16.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   28602,
+   30371
+  ]
+ },
+ "e8": {
+  "bbox": {
+   "x": 50.0,
+   "y": 30.0,
+   "z": 12.0,
+   "tol": 0.5
+  },
+  "hole_count": 0,
+  "hole_diameters": [],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   17160,
+   18221
+  ]
+ },
+ "h1": {
+  "bbox": {
+   "x": 100.0,
+   "y": 60.0,
+   "z": 30.0,
+   "tol": 0.5
+  },
+  "hole_count": 0,
+  "hole_diameters": [],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   42236,
+   44848
+  ]
+ },
+ "h2": {
+  "bbox": {
+   "x": 120.0,
+   "y": 80.0,
+   "z": 68.0,
+   "tol": 0.5
+  },
+  "hole_count": 4,
+  "hole_diameters": [
+   9.0,
+   9.0,
+   9.0,
+   9.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   123902,
+   131566
+  ]
+ },
+ "h3": {
+  "bbox": {
+   "x": 120.0,
+   "y": 120.0,
+   "z": 12.0,
+   "tol": 0.5
+  },
+  "hole_count": 17,
+  "hole_diameters": [
+   9.0,
+   9.0,
+   9.0,
+   9.0,
+   9.0,
+   9.0,
+   9.0,
+   9.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   15.0,
+   40.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   105828,
+   112374
+  ]
+ },
+ "h4": {
+  "bbox": {
+   "x": 80.0,
+   "y": 60.0,
+   "z": 25.0,
+   "tol": 0.5
+  },
+  "hole_count": 4,
+  "hole_diameters": [
+   5.5,
+   5.5,
+   5.5,
+   5.5
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   35371,
+   37559
+  ]
+ },
+ "h5": {
+  "bbox": {
+   "x": 100.0,
+   "y": 50.0,
+   "z": 20.0,
+   "tol": 0.5
+  },
+  "hole_count": 3,
+  "hole_diameters": [
+   8.0,
+   8.0,
+   10.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   70345,
+   74696
+  ]
+ },
+ "h6": {
+  "bbox": {
+   "x": 80.0,
+   "y": 80.0,
+   "z": 45.0,
+   "tol": 0.5
+  },
+  "hole_count": 5,
+  "hole_diameters": [
+   9.0,
+   9.0,
+   9.0,
+   9.0,
+   26.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   79343,
+   84251
+  ]
+ },
+ "h7": {
+  "bbox": {
+   "x": 100.0,
+   "y": 60.0,
+   "z": 48.0,
+   "tol": 0.5
+  },
+  "hole_count": 2,
+  "hole_diameters": [
+   6.0,
+   6.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   63496,
+   67424
+  ]
+ },
+ "m1": {
+  "bbox": {
+   "x": 100.0,
+   "y": 60.0,
+   "z": 46.0,
+   "tol": 0.5
+  },
+  "hole_count": 5,
+  "hole_diameters": [
+   6.6,
+   6.6,
+   6.6,
+   6.6,
+   20.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   45037,
+   47822
+  ]
+ },
+ "m2": {
+  "bbox": {
+   "x": 80.0,
+   "y": 50.0,
+   "z": 36.0,
+   "tol": 0.5
+  },
+  "hole_count": 2,
+  "hole_diameters": [
+   8.0,
+   8.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   41814,
+   44400
+  ]
+ },
+ "m3": {
+  "bbox": {
+   "x": 60.0,
+   "y": 40.0,
+   "z": 20.0,
+   "tol": 0.5
+  },
+  "hole_count": 0,
+  "hole_diameters": [],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   38875,
+   41280
+  ]
+ },
+ "m4": {
+  "bbox": {
+   "x": 100.0,
+   "y": 100.0,
+   "z": 10.0,
+   "tol": 0.5
+  },
+  "hole_count": 7,
+  "hole_diameters": [
+   9.0,
+   9.0,
+   9.0,
+   9.0,
+   9.0,
+   9.0,
+   30.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   65625,
+   69684
+  ]
+ },
+ "m5": {
+  "bbox": {
+   "x": 34.64,
+   "y": 30.0,
+   "z": 15.0,
+   "tol": 0.5
+  },
+  "hole_count": 1,
+  "hole_diameters": [
+   10.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   10198,
+   10829
+  ]
+ },
+ "m6": {
+  "bbox": {
+   "x": 40.0,
+   "y": 40.0,
+   "z": 50.0,
+   "tol": 0.5
+  },
+  "hole_count": 1,
+  "hole_diameters": [
+   10.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   34922,
+   37082
+  ]
+ },
+ "m7": {
+  "bbox": {
+   "x": 100.0,
+   "y": 70.0,
+   "z": 15.0,
+   "tol": 0.5
+  },
+  "hole_count": 4,
+  "hole_diameters": [
+   6.6,
+   6.6,
+   6.6,
+   6.6
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   86139,
+   91467
+  ]
+ },
+ "m8": {
+  "bbox": {
+   "x": 80.0,
+   "y": 50.0,
+   "z": 25.0,
+   "tol": 0.5
+  },
+  "hole_count": 4,
+  "hole_diameters": [
+   8.0,
+   8.0,
+   8.0,
+   8.0
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   94075,
+   99894
+  ]
+ },
+ "m9": {
+  "bbox": {
+   "x": 80.0,
+   "y": 60.0,
+   "z": 40.0,
+   "tol": 0.5
+  },
+  "hole_count": 2,
+  "hole_diameters": [
+   6.6,
+   6.6
+  ],
+  "diameter_tol": 0.15,
+  "volume_range": [
+   51841,
+   55048
+  ]
+ }
+}

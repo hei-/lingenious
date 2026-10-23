@@ -1,0 +1,10 @@
+第1轮:未通过 [internal_corner_radius] 存在 2 条无圆角的内凹尖角(共长 160.0mm,最长一条位于 (0.0, 21.0, 4.0)),圆角半径 0mm,要求不小于 0.5mm(建议 ≥3mm)
+第2轮:未通过 [exec_error] 脚本执行失败:  File "/app/core/sandbox/runner.py", line 13, in main
+    exec(compile(code, "script.py", "exec"), ns)
+  File "script.py", line 39, in <module>
+    inner_edges = inner_edges.union(body.edges(cq.selectors.BoxSelector(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/cadquery/cq.py", line 3385, in union
+    raise ValueError(
+ValueError: Workplane object must have at least one solid on the stack to union!
+第3轮:通过

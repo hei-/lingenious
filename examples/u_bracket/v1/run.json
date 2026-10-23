@@ -1,0 +1,152 @@
+{
+  "status": "success",
+  "spec": {
+    "part_type": "U型支架",
+    "material": "6061",
+    "process": "cnc_milling",
+    "features": [
+      {
+        "id": "F1",
+        "type": "base_plate",
+        "dims": {
+          "length": 80.0,
+          "width": 50.0,
+          "thickness": 4.0
+        },
+        "note": "U型支架底板"
+      },
+      {
+        "id": "F2",
+        "type": "side_wall",
+        "dims": {
+          "length": 80.0,
+          "height": 35.0,
+          "thickness": 4.0
+        },
+        "note": "一侧立板，高35含底板厚度"
+      },
+      {
+        "id": "F3",
+        "type": "side_wall",
+        "dims": {
+          "length": 80.0,
+          "height": 35.0,
+          "thickness": 4.0
+        },
+        "note": "另一侧立板，高35含底板厚度"
+      },
+      {
+        "id": "H1",
+        "type": "hole",
+        "dims": {
+          "diameter": 8.0
+        },
+        "note": "一侧壁通孔"
+      },
+      {
+        "id": "H2",
+        "type": "hole",
+        "dims": {
+          "diameter": 8.0
+        },
+        "note": "另一侧壁通孔"
+      }
+    ],
+    "assertions": {
+      "bbox": {
+        "x": 80.0,
+        "y": 50.0,
+        "z": 35.0,
+        "tol": 0.5
+      },
+      "hole_count": 2,
+      "hole_diameters": [
+        8.0,
+        8.0
+      ],
+      "diameter_tol": 0.1,
+      "volume_range": null,
+      "hole_positions": [
+        {
+          "diameter": 8.0,
+          "axis": "Y",
+          "x": 0.0,
+          "y": null,
+          "z": 17.5,
+          "tol": 1.0
+        },
+        {
+          "diameter": 8.0,
+          "axis": "Y",
+          "x": 0.0,
+          "y": null,
+          "z": 17.5,
+          "tol": 1.0
+        }
+      ]
+    },
+    "defaults_used": [
+      "侧壁孔沿长度方向居中（x=0）",
+      "侧壁孔沿高度方向居中于该壁（z=17.5）",
+      "侧壁孔按通孔处理",
+      "壁厚4mm为立板厚度，高度35mm为含底板的总高"
+    ],
+    "missing": []
+  },
+  "rounds": [
+    {
+      "n": 1,
+      "seconds": 2.39,
+      "code": "import cadquery as cq\n\n# ---------------- parameters ----------------\nBASE_L = 80.0          # length along X\nBASE_W = 50.0          # width along Y\nBASE_T = 4.0           # base plate thickness\n\nWALL_H = 35.0          # total height including base\nWALL_T = 4.0           # side wall thickness\n\nHOLE_D = 8.0           # side wall hole diameter\nHOLE_X = 0.0           # hole x position (centered along length)\nHOLE_Z = 17.5          # hole z position (centered on wall height)\n\n# ---------------- feature: base ----------------\nbody = cq.Workplane(\"XY\").box(BASE_L, BASE_W, BASE_T, centered=(True, True, False))\n\n# ---------------- feature: side wall 1 (F2) ----------------\nwall1 = (cq.Workplane(\"XY\").workplane(offset=0)\n         .center(0, -BASE_W / 2 + WALL_T / 2)\n         .rect(BASE_L, WALL_T)\n         .extrude(WALL_H))\nbody = body.union(wall1)\n\n# ---------------- feature: side wall 2 (F3) ----------------\nwall2 = (cq.Workplane(\"XY\").workplane(offset=0)\n         .center(0, BASE_W / 2 - WALL_T / 2)\n         .rect(BASE_L, WALL_T)\n         .extrude(WALL_H))\nbody = body.union(wall2)\n\n# ---------------- feature: H1 (hole through wall 1, axis Y) ----------------\nh1 = (cq.Workplane(\"XZ\").workplane(offset=-(BASE_W / 2))\n      .center(HOLE_X, HOLE_Z)\n      .circle(HOLE_D / 2)\n      .extrude(BASE_W))\nbody = body.cut(h1)\n\n# ---------------- feature: H2 (hole through wall 2, axis Y) ----------------\nh2 = (cq.Workplane(\"XZ\").workplane(offset=-(BASE_W / 2))\n      .center(HOLE_X, HOLE_Z)\n      .circle(HOLE_D / 2)\n      .extrude(BASE_W))\nbody = body.cut(h2)\n\nresult = body",
+      "issues": [
+        {
+          "rule": "internal_corner_radius",
+          "level": "L3",
+          "severity": "error",
+          "target": "internal_edges",
+          "message": "存在 2 条无圆角的内凹尖角(共长 160.0mm,最长一条位于 (0.0, 21.0, 4.0)),圆角半径 0mm,要求不小于 0.5mm(建议 ≥3mm)",
+          "measured": 0.0,
+          "required": 3.0,
+          "hint": "对这些内凹边添加圆角 fillet,半径取 3mm(最小 0.5mm);在 CadQuery 中先选中内凹边再 fillet,或在建模时对草图拐角加圆角",
+          "location": [
+            0.0,
+            21.0,
+            4.0
+          ]
+        }
+      ],
+      "glb": "rounds/r1.glb"
+    },
+    {
+      "n": 2,
+      "seconds": 1.9,
+      "code": "import cadquery as cq\n\n# ---------------- parameters ----------------\nBASE_L = 80.0          # length along X\nBASE_W = 50.0          # width along Y\nBASE_T = 4.0           # base plate thickness\n\nWALL_H = 35.0          # total height including base\nWALL_T = 4.0           # side wall thickness\n\nHOLE_D = 8.0           # side wall hole diameter\nHOLE_X = 0.0           # hole x position (centered along length)\nHOLE_Z = 17.5          # hole z position (centered on wall height)\n\nINNER_FILLET_R = 3.0   # inner corner fillet radius (base-to-wall)\n\n# ---------------- feature: base ----------------\nbody = cq.Workplane(\"XY\").box(BASE_L, BASE_W, BASE_T, centered=(True, True, False))\n\n# ---------------- feature: side wall 1 (F2) ----------------\nwall1 = (cq.Workplane(\"XY\").workplane(offset=0)\n         .center(0, -BASE_W / 2 + WALL_T / 2)\n         .rect(BASE_L, WALL_T)\n         .extrude(WALL_H))\nbody = body.union(wall1)\n\n# ---------------- feature: side wall 2 (F3) ----------------\nwall2 = (cq.Workplane(\"XY\").workplane(offset=0)\n         .center(0, BASE_W / 2 - WALL_T / 2)\n         .rect(BASE_L, WALL_T)\n         .extrude(WALL_H))\nbody = body.union(wall2)\n\n# ---------------- feature: inner fillets (base-to-wall inner corners) ----------------\n# select the two inner concave edges running along X at z = BASE_T\ninner_edges = body.edges(cq.selectors.BoxSelector(\n    (-BASE_L, -BASE_W / 2 + WALL_T - 0.1, BASE_T - 0.1),\n    (BASE_L, -BASE_W / 2 + WALL_T + 0.1, BASE_T + 0.1)))\ninner_edges = inner_edges.union(body.edges(cq.selectors.BoxSelector(\n    (-BASE_L, BASE_W / 2 - WALL_T - 0.1, BASE_T - 0.1),\n    (BASE_L, BASE_W / 2 - WALL_T + 0.1, BASE_T + 0.1))))\nbody = body.edges(cq.selectors.BoxSelector(\n    (-BASE_L, -BASE_W / 2 + WALL_T - 0.1, BASE_T - 0.1),\n    (BASE_L, -BASE_W / 2 + WALL_T + 0.1, BASE_T + 0.1))).fillet(INNER_FILLET_R)\nbody = body.edges(cq.selectors.BoxSelector(\n    (-BASE_L, BASE_W / 2 - WALL_T - 0.1, BASE_T - 0.1),\n    (BASE_L, BASE_W / 2 - WALL_T + 0.1, BASE_T + 0.1))).fillet(INNER_FILLET_R)\n\n# ---------------- feature: H1 (hole through wall 1, axis Y) ----------------\nh1 = (cq.Workplane(\"XZ\").workplane(offset=-(BASE_W / 2))\n      .center(HOLE_X, HOLE_Z)\n      .circle(HOLE_D / 2)\n      .extrude(BASE_W))\nbody = body.cut(h1)\n\n# ---------------- feature: H2 (hole through wall 2, axis Y) ----------------\nh2 = (cq.Workplane(\"XZ\").workplane(offset=-(BASE_W / 2))\n      .center(HOLE_X, HOLE_Z)\n      .circle(HOLE_D / 2)\n      .extrude(BASE_W))\nbody = body.cut(h2)\n\nresult = body",
+      "issues": [
+        {
+          "rule": "exec_error",
+          "level": "L0",
+          "severity": "error",
+          "target": "",
+          "message": "脚本执行失败:  File \"/app/core/sandbox/runner.py\", line 13, in main\n    exec(compile(code, \"script.py\", \"exec\"), ns)\n  File \"script.py\", line 39, in <module>\n    inner_edges = inner_edges.union(body.edges(cq.selectors.BoxSelector(\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/cadquery/cq.py\", line 3385, in union\n    raise ValueError(\nValueError: Workplane object must have at least one solid on the stack to union!",
+          "measured": null,
+          "required": null,
+          "hint": "",
+          "location": null
+        }
+      ]
+    },
+    {
+      "n": 3,
+      "seconds": 2.88,
+      "code": "import cadquery as cq\n\n# ---------------- parameters ----------------\nBASE_L = 80.0          # length along X\nBASE_W = 50.0          # width along Y\nBASE_T = 4.0           # base plate thickness\n\nWALL_H = 35.0          # total height including base\nWALL_T = 4.0           # side wall thickness\n\nHOLE_D = 8.0           # side wall hole diameter\nHOLE_X = 0.0           # hole x position (centered along length)\nHOLE_Z = 17.5          # hole z position (centered on wall height)\n\nINNER_FILLET_R = 3.0   # inner corner fillet radius (base-to-wall)\n\n# ---------------- feature: base ----------------\nbody = cq.Workplane(\"XY\").box(BASE_L, BASE_W, BASE_T, centered=(True, True, False))\n\n# ---------------- feature: side wall 1 (F2) ----------------\nwall1 = (cq.Workplane(\"XY\").workplane(offset=0)\n         .center(0, -BASE_W / 2 + WALL_T / 2)\n         .rect(BASE_L, WALL_T)\n         .extrude(WALL_H))\nbody = body.union(wall1)\n\n# ---------------- feature: side wall 2 (F3) ----------------\nwall2 = (cq.Workplane(\"XY\").workplane(offset=0)\n         .center(0, BASE_W / 2 - WALL_T / 2)\n         .rect(BASE_L, WALL_T)\n         .extrude(WALL_H))\nbody = body.union(wall2)\n\n# ---------------- feature: inner fillets (base-to-wall inner corners) ----------------\nbody = body.edges(cq.selectors.BoxSelector(\n    (-BASE_L, -BASE_W / 2 + WALL_T - 0.1, BASE_T - 0.1),\n    (BASE_L, -BASE_W / 2 + WALL_T + 0.1, BASE_T + 0.1))).fillet(INNER_FILLET_R)\nbody = body.edges(cq.selectors.BoxSelector(\n    (-BASE_L, BASE_W / 2 - WALL_T - 0.1, BASE_T - 0.1),\n    (BASE_L, BASE_W / 2 - WALL_T + 0.1, BASE_T + 0.1))).fillet(INNER_FILLET_R)\n\n# ---------------- feature: H1 (hole through wall 1, axis Y) ----------------\nh1 = (cq.Workplane(\"XZ\").workplane(offset=-(BASE_W / 2))\n      .center(HOLE_X, HOLE_Z)\n      .circle(HOLE_D / 2)\n      .extrude(BASE_W))\nbody = body.cut(h1)\n\n# ---------------- feature: H2 (hole through wall 2, axis Y) ----------------\nh2 = (cq.Workplane(\"XZ\").workplane(offset=-(BASE_W / 2))\n      .center(HOLE_X, HOLE_Z)\n      .circle(HOLE_D / 2)\n      .extrude(BASE_W))\nbody = body.cut(h2)\n\nresult = body",
+      "issues": [],
+      "glb": "rounds/r3.glb"
+    }
+  ],
+  "final_issues": [],
+  "usage": {
+    "calls": 4,
+    "prompt_tokens": 6653,
+    "completion_tokens": 2464
+  }
+}

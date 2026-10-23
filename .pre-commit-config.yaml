@@ -1,0 +1,25 @@
+# pip install pre-commit && pre-commit install
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+        exclude: ^(eval/results|web/landing/data|examples|web/ui/public/mock)/
+      - id: trailing-whitespace
+        exclude: ^(eval/results|web/landing/data)/|\.md$
+      - id: check-yaml
+      - id: check-json
+        exclude: tsconfig.json$
+      - id: check-added-large-files
+        args: [--maxkb=800]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.1
+    hooks:
+      - id: ruff   # check only; `ruff format` is not adopted (would reformat ~65 files)
+  - repo: local
+    hooks:
+      - id: secret-scan
+        name: secret scan (sk- keys, DEEPSEEK_API_KEY=value, Feishu tokens)
+        entry: python3 scripts/scan_secrets.py
+        language: system
+        pass_filenames: true

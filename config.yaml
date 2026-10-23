@@ -1,0 +1,35 @@
+llm:
+  base_url: https://api.deepseek.com
+  model: deepseek-chat
+  api_key_env: DEEPSEEK_API_KEY
+  temperature: 0.2
+agent:
+  max_rounds: 4
+sandbox:
+  timeout_s: 60
+  mem_mb: 4096     # child-process address-space cap (RLIMIT_AS)
+dfm:
+  hole_edge_factor: 1.5
+  hole_edge_wall_cap: 6.0   # mm, hole wall to edge never required beyond this
+  min_wall_error: 1.5
+  min_wall_warn: 2.0
+  min_internal_radius: 0.5
+  recommended_internal_radius: 3.0
+  # --- 新增规则阈值(通用经验值,待工艺人员复核) ---
+  hole_depth_warn: 6.0          # 盲孔深径比 warning
+  hole_depth_error: 10.0        # 盲孔深径比 error
+  hole_depth_through_warn: 6.0  # 通孔(板厚/孔径)仅 warning
+  deep_pocket_warn: 4.0         # 腔深/最小腔宽
+  thin_web_warn: 8.0            # 筋高/筋厚
+  thin_web_max_thickness: 5.0   # mm,厚于此值不按薄筋判断
+  # 按材料/工艺覆盖(优先级最高;可写任何上面的键,min_wall_thickness 同时抬高壁厚 error/warn)
+  material_overrides:
+    "6061": {min_wall_thickness: 1.5}
+    "steel": {min_wall_thickness: 2.0, hole_depth_warn: 5.0, hole_depth_error: 8.0, deep_pocket_warn: 3.0, thin_web_warn: 6.0}
+  # process_overrides:
+  #   cnc_turning: {hole_depth_warn: 8.0}
+  # 单条规则开关与覆盖(优先级低于 material/process_overrides)
+  # rules:
+  #   deep_pocket: {enabled: true, warn: 4}
+  #   thin_web_height: {enabled: true, warn: 8, max_thickness: 5}
+  #   hole_depth_ratio: {enabled: true, warn: 6, error: 10, through_warn: 6}

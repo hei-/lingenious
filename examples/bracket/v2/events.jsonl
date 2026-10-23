@@ -1,0 +1,16 @@
+{"event": "parsing", "data": {}}
+{"event": "spec", "data": {"part_type": "L型支架", "material": "6061", "process": "cnc_milling", "features": [{"id": "base_plate", "type": "plate", "dims": {"length": 100.0, "width": 60.0, "thickness": 6.0}, "note": "底板"}, {"id": "vertical_plate", "type": "plate", "dims": {"length": 100.0, "height": 40.0, "thickness": 4.0}, "note": "立板沿长边，位于底板一侧"}, {"id": "corner_hole_1", "type": "hole", "dims": {"diameter": 6.6}, "note": "底板四角 M6 通孔"}, {"id": "corner_hole_2", "type": "hole", "dims": {"diameter": 6.6}, "note": "底板四角 M6 通孔"}, {"id": "corner_hole_3", "type": "hole", "dims": {"diameter": 6.6}, "note": "底板四角 M6 通孔"}, {"id": "corner_hole_4", "type": "hole", "dims": {"diameter": 6.6}, "note": "底板四角 M6 通孔"}, {"id": "vertical_hole", "type": "hole", "dims": {"diameter": 20.0}, "note": "立板中间圆孔，通孔"}], "assertions": {"bbox": {"x": 100.0, "y": 60.0, "z": 46.0, "tol": 0.5}, "hole_count": 5, "hole_diameters": [6.6, 6.6, 6.6, 6.6, 20.0], "diameter_tol": 0.1, "volume_range": null, "hole_positions": [{"diameter": 6.6, "axis": "Z", "x": -36.8, "y": -16.8, "z": null, "tol": 1.0}, {"diameter": 6.6, "axis": "Z", "x": 36.8, "y": -16.8, "z": null, "tol": 1.0}, {"diameter": 6.6, "axis": "Z", "x": -36.8, "y": 16.8, "z": null, "tol": 1.0}, {"diameter": 6.6, "axis": "Z", "x": 36.8, "y": 16.8, "z": null, "tol": 1.0}, {"diameter": 20.0, "axis": "Y", "x": 0.0, "y": null, "z": 26.0, "tol": 1.0}]}, "defaults_used": ["M6 通孔按 6.6mm", "四角孔边距取 max(12, 2×孔径)=13.2mm", "立板圆孔沿长度方向居中、沿高度方向居中于立板", "立板圆孔按通孔", "立板位于底板宽度一侧，外侧面与底板边缘齐平"], "missing": []}}
+{"event": "generating", "data": {}}
+{"event": "round", "data": {"n": 4, "seconds": 2.13, "exec_ok": true, "issues": [{"rule": "thin_web_height", "level": "L3", "severity": "warning", "target": "(-0.0, -28.0, 46.0)", "message": "薄筋/薄壁(顶面位于 (-0.0, -28.0, 46.0) 附近)高 37.0mm,厚 4.0mm,高厚比 9.3,超过建议值 8(加工易振刀、变形)", "measured": 9.25, "required": 8.0, "hint": "将厚度增加到至少 4.6mm,或把高度降到不超过 32.0mm,或在根部加圆角/增设加强筋", "location": [-0.0, -28.0, 46.0]}], "glb": "rounds/r4.glb"}}
+{"event": "artifact", "data": {"name": "rounds/r4.glb"}}
+{"event": "artifact", "data": {"name": "part.py"}}
+{"event": "artifact", "data": {"name": "part.step"}}
+{"event": "artifact", "data": {"name": "run.json"}}
+{"event": "artifact", "data": {"name": "log.txt"}}
+{"event": "artifact", "data": {"name": "render.png"}}
+{"event": "artifact", "data": {"name": "thumb.png"}}
+{"event": "artifact", "data": {"name": "part.glb"}}
+{"event": "artifact", "data": {"name": "drawing.pdf"}}
+{"event": "artifact", "data": {"name": "drawing.dxf"}}
+{"event": "artifact", "data": {"name": "drawing.png"}}
+{"event": "done", "data": {"status": "success", "version": 2, "usage": {"calls": 2, "prompt_tokens": 2950, "completion_tokens": 1697}}}

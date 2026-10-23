@@ -1,0 +1,31 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+    image: lingenious-web
+    ports:
+      # localhost only by default; set LINGENIOUS_ACCESS_TOKEN in .env to require a token (see SECURITY.md).
+      # To expose it, change to "8000:8000" and put an authenticating reverse proxy in front.
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - path: .env        # DEEPSEEK_API_KEY=...  (optional: without it only the examples work)
+        required: false
+    environment:
+      LINGENIOUS_MAX_WORKERS: ${LINGENIOUS_MAX_WORKERS:-2}
+      LINGENIOUS_ACCESS_TOKEN: ${LINGENIOUS_ACCESS_TOKEN:-}   # optional; set in .env to require a token (see SECURITY.md)
+    volumes:
+      - data:/app/data    # named volume: inherits the image's uid-10001 ownership
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=1g,mode=1777,exec   # sandbox workdirs, matplotlib/XDG caches
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 8g
+    cpus: 4
+    pids_limit: 512
+
+volumes:
+  data:

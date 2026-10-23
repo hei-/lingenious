@@ -1,0 +1,44 @@
+{
+ "request": "L 型铝支架:底板 100×60×6mm,立板沿长边,高 40mm、厚 3mm,底板四角各一个 M6 通孔,立板中间一个直径 20 的圆孔。",
+ "material": "6061",
+ "config": "C",
+ "created_at": "2026-10-23T00:31:59.672351+00:00",
+ "changes": {
+  "2": "立板厚度改成 4mm"
+ },
+ "source": "scripts/make_examples.py (genuine agent run, outputs unedited)",
+ "selection": {
+  "runs": 3,
+  "picked": 0,
+  "reason": "all versions succeeded; shows 2 real fix round(s); 2 final warning(s); earliest such run",
+  "reason_zh": "所有版本均通过;含 2 轮真实修正;终稿 2 条警告;同等条件下最早的一次",
+  "summary": [
+   {
+    "1": [
+     "success",
+     3
+    ],
+    "2": [
+     "success",
+     1
+    ]
+   },
+   {
+    "1": [
+     "failed",
+     4
+    ]
+   },
+   {
+    "1": [
+     "success",
+     2
+    ],
+    "2": [
+     "success",
+     1
+    ]
+   }
+  ]
+ }
+}
