@@ -108,6 +108,8 @@ python -m eval.runner --taskset dfm --configs A B C --repeat 3 --workers 5   # D
 python -m eval.report [eval/results_dfm]                                 # 汇总与图
 ```
 
+(在开发环境里运行,例如容器内,并提供 API key。每次运行都从头开始,并替换输出目录里的 `results.csv`;中断后加 `--resume` 继续,想保留仓库里已有的结果就用 `--out <目录>`。)
+
 ### 主任务集(24 题,任务文本写明了圆角等要求)
 
 | 配置 | 一次通过 | 最终通过 | 平均轮数 | 平均 token |

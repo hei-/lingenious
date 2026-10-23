@@ -107,7 +107,7 @@ python -m eval.runner --taskset dfm --configs A B C --repeat 3 --workers 5   # D
 python -m eval.report [eval/results_dfm]                                     # summary and chart
 ```
 
-(Run these in the dev environment, e.g. inside the container, with the API key available.)
+(Run these in the dev environment, e.g. inside the container, with the API key available. Each run starts over and replaces `results.csv` in the output directory; add `--resume` to continue an interrupted run, or `--out <dir>` to keep the committed results.)
 
 ### Main set (24 tasks; task text states fillets etc. explicitly)
 
