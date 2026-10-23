@@ -12,7 +12,7 @@ license = { file = "LICENSE" }
 requires-python = ">=3.10,<3.13"
 dependencies = [
     "cadquery==2.8.0",
-    "openai>=1.40,<3",
+    "openai>=1.40,<4",
     "pydantic>=2.6,<3",
     "pyyaml>=6,<7",
     "matplotlib>=3.8,<4",
