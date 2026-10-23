@@ -142,6 +142,7 @@ Interpretation:
 - **Fidelity cost, before and after a fix.** In the first run, L3 feedback dropped final pass from 97% (A) to 81% (C): to satisfy DFM rules the model thickened walls and moved holes, drifting from the request. We then changed the repair prompt so L3 violations are sent back together with the requirement-derived constraints (bounding box, hole count, diameters, positions) that must not change ("keep a DFM warning rather than violate the request"). Re-run of all three configs: the gap shrank from 16 points (97 vs 81) to 3 points (92 vs 89), disputes fell from 61 to 46, and the DFM gain was kept (1.69 -> 1.67 residual errors). The previous run is kept in `eval/results_dfm/previous/`.
 - Caveat: A itself moved from 97% to 92% between the two runs (same tasks, same model name), so run-to-run noise is several points; the intervals overlap and the improvement is a trend, not a significant result. Remaining C failures are `d7` and `d10` (volume out of range); `d10` also fails in A/B.
 - Cost: L3 feedback still uses about 2.5x the tokens.
+- Re-run after upgrading to CadQuery 2.8 / OCCT 7.9 (same tasks and model): final pass A 97% / B 100% / C 97%, final L3 errors 2.39 / 2.42 / 1.78. No regression; the shifts are within the run-to-run noise noted above. Data in `eval/results_dfm/cadquery-2.8/`.
 - Small sample (36 per cell), wide intervals; tasks were written by the authors and results apply to this model.
 
 Raw data: `eval/results/results.csv`, `eval/results_dfm/results.csv`; summaries: `summary.md` and `comparison.png` in each directory.
