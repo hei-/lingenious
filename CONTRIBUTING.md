@@ -59,8 +59,8 @@ Versions follow SemVer, `0.x` while the API is unstable. The single source of tr
 1. Move the `Unreleased` entries of `CHANGELOG.md` under a new `## [0.x.y] - YYYY-MM-DD` heading and bump `version` in `pyproject.toml`.
 2. Merge to `main` with CI green (python, ui, docker-web, landing).
 3. Tag and push: `git tag v0.x.y && git push origin v0.x.y`.
-4. `.github/workflows/release.yml` builds `web/Dockerfile` and pushes `ghcr.io/<owner>/<repo>-web:{0.x.y,0.x,latest}` using the built-in `GITHUB_TOKEN` (no repository secrets; the image is build-only, nothing is deployed). Pre-release tags (`v0.2.0-rc1`) do not get `latest`.
-5. Create the GitHub release from the tag, pasting the changelog section.
+4. `.github/workflows/release.yml` builds `web/Dockerfile` and pushes `ghcr.io/<owner>/<repo>-web:{0.x.y,0.x,latest}` using the built-in `GITHUB_TOKEN` (no repository secrets; nothing is deployed). Pre-release tags (`v0.2.0-rc1`) do not get `latest`. If the owner name is not a valid Docker namespace (for example it ends in `-`), the image is only built, not pushed.
+5. The same workflow then creates the GitHub release for the tag, with the matching `CHANGELOG.md` section as release notes (tags containing `-` are marked as pre-releases).
 
 Dependabot (weekly) proposes pip, npm (`web/ui`), GitHub Actions and Docker updates; after merging pip updates run `make lock`.
 

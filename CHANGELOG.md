@@ -13,7 +13,7 @@ All notable changes are documented here. Format follows [Keep a Changelog](https
 - Web app (FastAPI + React/three.js UI) with run history, 3D viewer, version compare and examples; Docker image for it, bound to localhost.
 - Feishu Bitable adapter, evaluation harness (`eval/`, general and DFM task sets, reference solids, report generation).
 - Engineering baseline: `pyproject.toml` (version 0.1.0), hash-pinned `requirements.lock` / `requirements-dev.lock`, Dockerfile `runtime` / `dev` targets, Makefile, ruff (check only), mypy with a lenient baseline, pytest-cov, ESLint for `web/ui`, pre-commit (including a simple secret scan).
-- CI (GitHub Actions): python tests + lint + type check + coverage, UI typecheck/tests/lint/build, web image build with smoke test, landing page checks and GitHub Pages deploy; release workflow publishing the web image to GHCR on `v*` tags.
+- CI (GitHub Actions): python tests + lint + type check + coverage, UI typecheck/tests/lint/build, web image build with smoke test, landing page checks and GitHub Pages deploy; release workflow on `v*` tags that builds the web image (pushed to GHCR when the owner name is a valid Docker namespace) and creates the GitHub release from this changelog.
 - Project files: CONTRIBUTING (incl. release process), issue and PR templates, CODEOWNERS (placeholder owner), Dependabot config, SECURITY policy, bilingual docs (en / zh-CN).
 
 ### Changed
@@ -26,6 +26,7 @@ All notable changes are documented here. Format follows [Keep a Changelog](https
 - Spec parsing no longer stops with "need info" when only hole positions, fillets, chamfers or hole depth are unspecified: the prompt forbids listing them as missing and `parse_spec` moves any such item to `defaults_used`. U-bracket example request: 5/10 -> 0/10 false "need info"; underspecified requests still ask (10/10).
 
 ### Known gaps
+- No prebuilt image for this repository: the owner name `hei-` is not a valid Docker namespace, so GHCR publishing is skipped; build locally with `docker compose up --build`.
 - Thresholds of DFM rules are partly rules of thumb pending process-engineering review (see `docs/dfm-rules.md`).
 - The sandbox is not safe for untrusted code (see SECURITY.md).
 

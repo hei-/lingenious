@@ -4,7 +4,7 @@ on:
     tags: ["v*"]
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -12,19 +12,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # GHCR paths use the owner name, and Docker references cannot have a path component ending in "-"
+      # (e.g. owner "hei-"). For such owners the image is built but not pushed.
+      - id: target
+        run: |
+          owner="$(echo "${GITHUB_REPOSITORY_OWNER}" | tr '[:upper:]' '[:lower:]')"
+          if echo "$owner" | grep -Eq '^[a-z0-9]+([._-][a-z0-9]+)*$'; then
+            echo "push=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "push=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Owner '$owner' is not a valid Docker namespace; building the web image without pushing to GHCR."
+          fi
+          echo "image=ghcr.io/${owner}/${GITHUB_REPOSITORY#*/}-web" >> "$GITHUB_OUTPUT"
       - uses: docker/setup-qemu-action@v3
         with:
           platforms: arm64
       - uses: docker/setup-buildx-action@v3
-      - uses: docker/login-action@v3
+      - if: steps.target.outputs.push == 'true'
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: meta
+        if: steps.target.outputs.push == 'true'
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}-web
+          images: ${{ steps.target.outputs.image }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -37,8 +51,31 @@ jobs:
           # (checked 2026-10: Linux wheels are x86_64 only), so the default stays amd64. Once a cadquery release
           # moves to cadquery-ocp >= 8 (has manylinux_2_28_aarch64), set repo variable WEB_PLATFORMS=linux/amd64,linux/arm64.
           platforms: ${{ vars.WEB_PLATFORMS || 'linux/amd64' }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          push: ${{ steps.target.outputs.push == 'true' }}
+          tags: ${{ steps.meta.outputs.tags || 'lingenious-web:release' }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  github-release:
+    needs: web-image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Release notes = the CHANGELOG section of this version ("## [x.y.z] - date" up to the next heading or link definitions).
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="${TAG#v}"
+          awk -v v="$version" '
+            index($0, "## [" v "]") == 1 { on = 1; next }
+            on && /^## \[/ { exit }
+            on && /^\[[^]]+\]: / { exit }
+            on { print }
+          ' CHANGELOG.md > notes.md
+          test -s notes.md || echo "See CHANGELOG.md." > notes.md
+          flags=""
+          case "$TAG" in *-*) flags="--prerelease" ;; esac
+          gh release create "$TAG" --title "$TAG" --notes-file notes.md --verify-tag $flags
