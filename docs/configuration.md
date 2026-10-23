@@ -54,4 +54,4 @@ LINGENIOUS__DFM__MATERIAL_OVERRIDES__6061__MIN_WALL_THICKNESS=1.0
 
 `web/Dockerfile` 的运行时镜像只复制 `core/` `web/server/` `web/ui/dist` `examples/` `config.yaml` `pyproject.toml`(不含 docs、tests、eval、adapters、web/landing、node)。构建需要 BuildKit(Docker ≥ 23 默认开启,旧版设 `DOCKER_BUILDKIT=1`),pip/npm/apt 使用缓存挂载,依赖层只随 `requirements.lock` 变化。
 
-`make web-multiarch`(buildx,默认 `PLATFORMS=linux/amd64,linux/arm64`,不推送;`PUSH=1 TAG=<repo:tag>` 推送)。**arm64 现状**:实测锁文件中除 `cadquery-ocp==7.7.2` 外所有依赖都有 aarch64 manylinux 轮子;`cadquery-ocp 7.7.2`(cadquery 2.5.2 固定)在 Linux 只发布 x86_64 轮子(`manylinux_2_35_x86_64`),aarch64 轮子从 8.x 才有。所以 arm64 构建目前会在 `pip install` 处失败,Release 工作流默认只构建 amd64(QEMU + buildx 已配置,待 cadquery 升级后设置仓库变量 `WEB_PLATFORMS=linux/amd64,linux/arm64`)。
+`make web-multiarch`(buildx,默认 `PLATFORMS=linux/amd64,linux/arm64`,不推送;`PUSH=1 TAG=<repo:tag>` 推送)。**arm64**:自 cadquery 2.8(`cadquery-ocp 7.9.3.x`)起,锁文件里的全部依赖都有 aarch64 manylinux 轮子。CI 在 x86_64 与 arm64 原生运行器上分别构建 Web 镜像并做冒烟测试(含一次真实 CadQuery 建模);Release 工作流默认发布 `linux/amd64,linux/arm64` 两种架构(可用仓库变量 `WEB_PLATFORMS` 覆盖)。镜像里的 UI 构建阶段固定在构建机架构上运行,交叉构建时不模拟 Node。

@@ -3,7 +3,8 @@
 # Needs BuildKit (default in Docker >= 23; with older engines set DOCKER_BUILDKIT=1) for the cache mounts.
 # Multi-arch: `make web-multiarch` (linux/amd64 + linux/arm64). The runtime stage copies explicit paths only
 # (no docs/, tests/, eval/, adapters/, web/landing, node, *.md): see the COPY lines below.
-FROM node:22-slim AS ui
+# the UI bundle is architecture-independent: build it natively even when cross-building the image
+FROM --platform=$BUILDPLATFORM node:22-slim AS ui
 WORKDIR /ui
 COPY web/ui/package.json web/ui/package-lock.json ./
 RUN --mount=type=cache,target=/root/.npm npm ci --no-audit --no-fund
