@@ -8,10 +8,10 @@ version = "0.1.0"
 description = "LLM-driven CadQuery CAD agent: spec, generate, check (DFM), drawing, web app"
 readme = "README.md"
 license = { file = "LICENSE" }
-# cadquery 2.5.2 (cadquery-ocp) has no wheels for Python 3.13 yet
+# kept at <3.13 until the CadQuery stack is tested on 3.13
 requires-python = ">=3.10,<3.13"
 dependencies = [
-    "cadquery==2.5.2",
+    "cadquery==2.8.0",
     "openai>=1.40,<3",
     "pydantic>=2.6,<3",
     "pyyaml>=6,<7",

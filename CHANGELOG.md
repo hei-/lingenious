@@ -5,7 +5,11 @@ All notable changes are documented here. Format follows [Keep a Changelog](https
 ## [Unreleased]
 
 ### Added
+- arm64 web image: the release workflow now publishes `linux/amd64` and `linux/arm64`; CI builds and smoke-tests the image on native x86_64 and arm64 runners.
 - Read-only online demo of the web app on GitHub Pages (`/demo/`): a `VITE_DEMO=1` build reads the bundled examples exported by `scripts/export_demo.py` (same payloads as the API, checked by a test); the landing page links to it. Example logic moved to `web/server/examples.py`; an example's `created_at` now comes from its `meta.json` instead of the file modification time.
+
+### Changed
+- CadQuery 2.5.2 -> 2.8.0 (OCCT 7.7 -> 7.9 via `cadquery-ocp` 7.9.3.1.1), which brings aarch64 wheels. All tests pass unchanged; regenerated example drawings differ in about 0.03% of pixels. CadQuery 2.8 pulls in vtk, trame, numba and scipy, so the dev image grew from 2.1 GB to 3.1 GB.
 
 ## [0.1.0] - 2026-10-23
 
