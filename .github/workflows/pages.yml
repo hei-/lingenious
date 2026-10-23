@@ -45,7 +45,7 @@ jobs:
           rm -rf _site/demo/mock
           python3 scripts/export_demo.py --out _site/demo/demo-data
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
       - id: deployment
